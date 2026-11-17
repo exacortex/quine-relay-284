@@ -1,0 +1,2 @@
+# B19: All 6 languages use bundled interpreters in vendor/ (copied by tools/build.sh)
+# executed via ruby or python3 (both already installed in qr157 base image).

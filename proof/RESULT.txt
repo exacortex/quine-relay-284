@@ -1,0 +1,3 @@
+GENERATED: 284 steps, QR.rb 40660 bytes, sha256 f6c73b482c42d99c, biggest payload 94741238 bytes, new apt: aspectc++ coq hare nix-bin singular fricas default-jdk-headless erlang-nox clips maxima gri generator-scripting-language maude agda acl2 texlive-metapost inform6-compiler xa65 gcc-aarch64-linux-gnu qemu-user z80asm gcc-riscv64-linux-gnu 
+PASSED: every step ran for real in Docker; QR2.rb is identical to QR.rb. Lap 2279 s. 
+Finished Tue 11/17/2026  5:59:41.32 

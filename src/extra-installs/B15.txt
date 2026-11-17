@@ -1,0 +1,45 @@
+# B15 Dockerfile.ext snippet - pinned source builds on Ubuntu 26.04 (GCC 15): csnobol4, cim 5.1, obnc 0.17.2, OpenEuphoria 4.1.0, marst 2.8, BCPL
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc libc6-dev libgc-dev m4 make git curl ca-certificates \
+    && (curl --retry 5 --retry-all-errors -fsSL https://ftp.regressive.org/snobol/snobol4-2.3.3.tar.gz -o /tmp/sno.tgz \
+        || curl --retry 5 --retry-all-errors -fsSL https://ftp.regressive.org/snobol/snobol4-2.3.2.tar.gz -o /tmp/sno.tgz \
+        || curl --retry 5 --retry-all-errors -fsSL https://ftp.regressive.org/snobol/snobol4-2.3.1.tar.gz -o /tmp/sno.tgz \
+        || (SNO_TGZ=$(curl --retry 5 -fsSL https://ftp.regressive.org/snobol/ | grep -oE 'snobol4-2\.[0-9.]+\.tar\.gz' | sort -V | tail -1) && curl --retry 5 -fsSL "https://ftp.regressive.org/snobol/$SNO_TGZ" -o /tmp/sno.tgz)) \
+    && mkdir -p /tmp/sno && tar -xzf /tmp/sno.tgz -C /tmp/sno --strip-components=1 \
+    && cd /tmp/sno && CC="gcc -std=gnu17 -fcommon -Wno-implicit-int -Wno-implicit-function-declaration -Wno-return-type" ./configure --prefix=/usr/local \
+    && make && make install && cd / && rm -rf /tmp/sno /tmp/sno.tgz \
+    && (curl --retry 5 --retry-all-errors -fsSL https://mirrors.kernel.org/gnu/cim/cim-5.1.tar.gz -o /tmp/cim.tar.gz \
+        || curl --retry 5 -fsSL http://ftpmirror.gnu.org/cim/cim-5.1.tar.gz -o /tmp/cim.tar.gz \
+        || curl --retry 5 -fsSL https://ftp.gnu.org/gnu/cim/cim-5.1.tar.gz -o /tmp/cim.tar.gz) \
+    && mkdir -p /tmp/cim && tar -xzf /tmp/cim.tar.gz -C /tmp/cim --strip-components=1 \
+    && cd /tmp/cim && sed -i 's|\.\./\.\./lib/cim\.h|cim.h|g' lib/*.c \
+    && ./configure --prefix=/usr/local CC="gcc -std=gnu89" CFLAGS="-O2 -fcommon -std=gnu89 -Wno-implicit-int -Wno-implicit-function-declaration -Wno-return-type" \
+    && make && make install && ldconfig \
+    && cd / && rm -rf /tmp/cim /tmp/cim.tar.gz \
+    && (curl --retry 5 --retry-all-errors -fsSL https://miasap.se/obnc/downloads/obnc_0.17.2.tar.gz -o /tmp/obnc.tgz \
+        || curl --retry 5 -fsSL http://miasap.se/obnc/downloads/obnc_0.17.2.tar.gz -o /tmp/obnc.tgz) \
+    && mkdir -p /tmp/obnc && tar -xzf /tmp/obnc.tgz -C /tmp/obnc --strip-components=1 \
+    && cd /tmp/obnc && sed -i 's/strlen("\\0")/1/g' src/*.c \
+    && CC="gcc -std=gnu17 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0" CFLAGS="-O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -Wno-error" ./build --prefix=/usr/local && ./install && ldconfig \
+    && cd / && rm -rf /tmp/obnc /tmp/obnc.tgz \
+    && curl --retry 5 --retry-all-errors -fsSL https://github.com/OpenEuphoria/euphoria/releases/download/4.1.0/euphoria-4.1.0-Linux-x64-57179171dbed.tar.gz -o /tmp/euphoria.tar.gz \
+    && tar -xzf /tmp/euphoria.tar.gz -C /opt \
+    && ln -sf /opt/euphoria-4.1.0-Linux-x64/bin/eui /usr/local/bin/eui \
+    && ln -sf /opt/euphoria-4.1.0-Linux-x64/bin/euc /usr/local/bin/euc \
+    && rm -f /tmp/euphoria.tar.gz \
+    && (curl --retry 5 --retry-all-errors -fsSL https://mirrors.kernel.org/gnu/marst/marst-2.8.tar.gz -o /tmp/marst.tgz \
+        || curl --retry 5 -fsSL http://ftpmirror.gnu.org/marst/marst-2.8.tar.gz -o /tmp/marst.tgz \
+        || curl --retry 5 -fsSL https://ftp.gnu.org/gnu/marst/marst-2.8.tar.gz -o /tmp/marst.tgz) \
+    && mkdir -p /tmp/marst && tar -xzf /tmp/marst.tgz -C /tmp/marst --strip-components=1 \
+    && cd /tmp/marst && sed -i 's/append(code, t_image);/append(code, "%s", t_image);/g' marst.c \
+    && CC="gcc -std=gnu17" ./configure --prefix=/usr/local && make && make install && ldconfig \
+    && cd / && rm -rf /tmp/marst /tmp/marst.tgz \
+    && curl --retry 5 --retry-all-errors -fsSL https://www.cl.cam.ac.uk/users/mr10/BCPL/bcpl.tgz -o /tmp/bcpl.tgz \
+    && tar -xzf /tmp/bcpl.tgz -C /opt \
+    && cd /opt/BCPL/cintcode \
+    && mkdir -p obj obj64 bin && touch cin/syscin/* cin64/syscin/* \
+    && sed -i 's/gcc /gcc -std=gnu17 -Wno-implicit-int -Wno-implicit-function-declaration -Wno-return-type /g' Makefile \
+    && export BCPLROOT=/opt/BCPL/cintcode BCPLPATH=/opt/BCPL/cintcode/cin64 BCPLHDRS=/opt/BCPL/cintcode/g BCPLSCRIPTS=/opt/BCPL/cintcode/s PATH="/opt/BCPL/cintcode/bin:$PATH" \
+    && make clean64 && make sys64 \
+    && ln -sf /opt/BCPL/cintcode/bin/cintsys64 /usr/local/bin/cintsys64 \
+    && rm -f /tmp/bcpl.tgz

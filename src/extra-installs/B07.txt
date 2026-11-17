@@ -1,0 +1,6 @@
+# B07: Dockerfile lines for installs with no apt package. Pin versions.
+RUN curl -fsSL https://ziglang.org/download/0.13.0/zig-linux-x86_64-0.13.0.tar.xz | tar -xJ -C /opt && ln -sf /opt/zig-linux-x86_64-0.13.0/zig /usr/local/bin/zig
+RUN mkdir -p /usr/local/lib/odin && curl -fsSL https://github.com/odin-lang/Odin/releases/download/dev-2026-10/odin-linux-amd64-dev-2026-10.tar.gz | tar -xz -C /usr/local/lib/odin --strip-components=1 && ln -sf /usr/local/lib/odin/odin /usr/local/bin/odin && ln -sf /usr/bin/gcc /usr/local/bin/clang
+RUN curl -fsSL https://github.com/vlang/v/releases/download/0.4.12/v_linux.zip -o /tmp/v_linux.zip && unzip -q /tmp/v_linux.zip -d /opt && ln -sf /opt/v/v /usr/local/bin/v && rm /tmp/v_linux.zip
+RUN curl -fsSL https://github.com/c3lang/c3c/releases/download/v0.7.0/c3-linux.tar.gz | tar -xz -C /opt && ln -sf /opt/c3/c3c /usr/local/bin/c3c && ln -sf /usr/lib/x86_64-linux-gnu/libxml2.so.16 /usr/lib/x86_64-linux-gnu/libxml2.so.2
+RUN mkdir -p /tmp/nelua && curl -fsSL https://github.com/edubart/nelua-lang/archive/9840cc8e.tar.gz | tar -xz -C /tmp/nelua --strip-components=1 && make -C /tmp/nelua install PREFIX=/usr/local && rm -rf /tmp/nelua

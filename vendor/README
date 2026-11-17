@@ -1,0 +1,133 @@
+Unlambda: unlambda.rb
+  * self-made
+  * License: MIT
+
+Whitespace: whitespace.rb
+  * self-made
+  * License: MIT
+
+Subleq: subleq.rb
+  * self-made
+  * License: MIT
+
+Thue: thue.rb
+  * self-made
+  * License: MIT
+
+Ook!: ook-to-bf.rb
+  * self-made
+  * License: MIT
+
+BLC8: blc.rb
+  * self-made
+  * License: MIT
+
+FALSE: false.rb
+  * self-made
+  * License: MIT
+
+Aheui: aheui.rb
+  * self-made
+  * License: MIT
+
+ante: ante.rb
+  * https://github.com/michaeldv
+  * License: MIT
+
+Befunge: cfunge-0.9.0.tar.bz2
+  * http://sourceforge.net/projects/cfunge/
+  * License: GPL3
+
+Chef: Acme-Chef-1.03.tar.gz
+  * https://metacpan.org/pod/Acme::Chef
+  * License: the same terms as Perl (Artistic License)
+
+Grass: grass.rb
+  * http://www.blue.sky.or.jp/grass/
+  * License: BSD 2-Clause
+  * slightly modified for Ruby 2+
+
+GolfScript: golfscript.rb
+  * http://www.golfscript.com/golfscript/
+  * License: MIT
+
+LOLCODE: lci-0.10.5.zip
+  * http://lolcode.org/
+  * License: GPL3+
+
+Piet: npiet-1.3e.tar.gz
+  * http://www.bertnase.de/npiet/
+  * License: GPL2
+
+Lazy K: lazyk.c
+  * https://github.com/irori/lazyk
+  * License: GPL2+
+  * RDSTACK_SIZE raised to 10,000,000 for 284-step payloads
+
+Shakespeare: spl-1.2.1.tar.gz
+  * http://shakespearelang.sourceforge.net/
+  * License: GPL
+
+Velato: Velato_0_1.zip
+  * http://velato.net/
+  * License: freeware
+
+Frink: frink/frink.jar
+  * https://frinklang.org/ (Alan Eliasen)
+  * License: freeware / binary redistribution
+
+><> (Fish): fish.py
+  * self-made (https://esolangs.org/wiki/%3E%3C%3E)
+  * License: MIT
+
+Hexagony: hexagony.rb
+  * self-made (https://esolangs.org/wiki/Hexagony)
+  * License: MIT
+
+/// (Slashes): slashes.rb
+  * self-made (https://esolangs.org/wiki////)
+  * License: MIT
+
+CJam: cjam.rb
+  * self-made (https://esolangs.org/wiki/CJam)
+  * License: MIT
+
+Underload: underload.rb
+  * self-made (https://esolangs.org/wiki/Underload)
+  * License: MIT
+
+Brain-Flak: brain_flak.rb
+  * self-made (https://esolangs.org/wiki/Brain-Flak)
+  * License: MIT
+
+Emmental: emmental.rb
+  * self-made (https://esolangs.org/wiki/Emmental)
+  * License: MIT
+
+Rail: rail.rb
+  * self-made (https://esolangs.org/wiki/Rail)
+  * License: MIT
+
+Kipple: kipple.rb
+  * self-made (https://esolangs.org/wiki/Kipple)
+  * License: MIT
+
+Beatnik: beatnik.rb
+  * self-made (https://esolangs.org/wiki/Beatnik)
+  * License: MIT
+
+Glass: glass.rb
+  * self-made (https://esolangs.org/wiki/Glass)
+  * License: MIT
+
+Deadfish~: deadfish_tilde.rb
+  * self-made (https://esolangs.org/wiki/Deadfish~)
+  * License: MIT
+
+6502 asm (emulator): run6502.py
+  * self-made CLI runner for flat xa65 binaries
+  * License: MIT
+
+Z80 asm (emulator): runz80.py
+  * self-made CLI runner for flat z80asm binaries
+  * License: MIT

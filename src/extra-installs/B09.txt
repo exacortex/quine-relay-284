@@ -1,0 +1,7 @@
+# B09: proof & dependent types. Rocq (coq), Agda and ACL2 come from apt (Apt in batch.rb); these don't. All pinned.
+# Lean 4 v4.35.0: official release zip.
+RUN cd /opt && curl -fsSL -o lean.zip https://github.com/leanprover/lean4/releases/download/v4.35.0/lean-4.35.0-linux.zip && unzip -q lean.zip && rm lean.zip && ln -s /opt/lean-4.35.0-linux/bin/lean /usr/local/bin/lean && lean --version
+# Idris 2 v0.8.0: source build, bootstrapped with Chez Scheme (about 10 min).
+RUN apt-get update -qq && apt-get install -y -qq chezscheme libgmp-dev > /dev/null && git clone -q --depth 1 -b v0.8.0 https://github.com/idris-lang/Idris2 /tmp/idris2src && cd /tmp/idris2src && make bootstrap SCHEME=chezscheme PREFIX=/opt/idris2 > /tmp/idris2-build.log 2>&1 && make install PREFIX=/opt/idris2 >> /tmp/idris2-build.log 2>&1 && ln -s /opt/idris2/bin/idris2 /usr/local/bin/idris2 && cd / && rm -rf /tmp/idris2src && idris2 --version
+# F* v2026.10.25: official Linux release tarball (bundles z3). Its Custard compiler extracts to plain OCaml.
+RUN cd /opt && curl -fsSL https://github.com/FStarLang/FStar/releases/download/v2026.10.25/fstar-v2026.10.25-Linux-x86_64.tar.gz | tar -xz && ln -s /opt/fstar/bin/fstar.exe /usr/local/bin/fstar.exe && fstar.exe --version

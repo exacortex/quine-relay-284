@@ -1,0 +1,9 @@
+# B21: config & build languages. Nix comes from apt (nix-bin); these don't. All pinned.
+# Nickel 1.18.0 from crates.io (Rust build, about 6 min).
+RUN cargo install nickel-lang-cli --version 1.18.0 --locked --root /opt/nickel > /tmp/nickel-build.log 2>&1 && ln -s /opt/nickel/bin/nickel /usr/local/bin/nickel && nickel --version
+# CUE v0.17.1 and Starlark (Go, pinned pseudo-version) via go install.
+RUN GOBIN=/usr/local/bin go install cuelang.org/go/cmd/cue@v0.17.1 && GOBIN=/usr/local/bin go install go.starlark.net/cmd/starlark@v0.0.0-20261021141710-4f4267fb140d && cue version | head -1
+# Pkl 0.33.0 native binary (sha256 checked).
+RUN curl -fsSL --retry 6 --retry-delay 10 --retry-all-errors -o /usr/local/bin/pkl https://github.com/apple/pkl/releases/download/0.33.0/pkl-linux-amd64 && echo "b9a6ddea6b382b7d4db4cf78e77aa3858e0c8a7e02939d2ba298574b5d1fcc69  /usr/local/bin/pkl" | sha256sum -c && chmod +x /usr/local/bin/pkl && pkl --version
+# OPA v1.22.4 static binary for Rego (sha256 checked).
+RUN curl -fsSL --retry 6 --retry-delay 10 --retry-all-errors -o /usr/local/bin/opa https://github.com/open-policy-agent/opa/releases/download/v1.22.4/opa_linux_amd64_static && echo "35e3b352e715e80624ead6c89930d8585f6f7d94cdc409eb2a9fe36620dcccba  /usr/local/bin/opa" | sha256sum -c && chmod +x /usr/local/bin/opa && opa version | head -1

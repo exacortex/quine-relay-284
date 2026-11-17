@@ -1,0 +1,14 @@
+# B03: Dockerfile lines for installs with no apt package (Ubuntu 26.04). Pinned by tarball version / git tag.
+# Build tools for the source builds below (Seed7 links X11 and ncurses). gperf comes later, on purpose.
+RUN apt-get update -qq && apt-get -qq install -y git curl autoconf automake bison flex libx11-dev libncurses-dev && apt-get clean
+# Curry: PAKCS 3.9.0 binary release; `make` compiles its libraries with swipl (swi-prolog-nox, the Curry class's Apt). ~6 min.
+RUN cd /opt && curl -fsSL https://www.curry-lang.org/pakcs/download/pakcs-3.9.0-amd64-Linux.tar.gz | tar -xz && make -C /opt/pakcs-3.9.0 > /tmp/pakcs-make.log 2>&1 || (tail -40 /tmp/pakcs-make.log; exit 1)
+ENV PATH=/opt/pakcs-3.9.0/bin:$PATH
+# Parrot 8.1.0 (runs the PASM step). Must build BEFORE gperf exists: a new gperf regenerates
+# src/string/namealias.c with size_t and the build fails. Parallel make is flaky, so fall back to serial.
+RUN git clone -q --depth 1 -b RELEASE_8_1_0 https://github.com/parrot/parrot.git /opt/parrot-src && cd /opt/parrot-src && perl Configure.pl --prefix=/opt/parrot --optimize && (make -j"$(nproc)" || make) && make install && ln -s /opt/parrot/bin/parrot /usr/local/bin/parrot
+# Seed7 release 2026-07-11 (s7 interpreter), from source; s7 reads its includes from /opt/seed7/lib
+RUN git clone -q --depth 1 -b Seed7_release_2026-07-11 https://github.com/ThomasMertes/seed7.git /opt/seed7 && cd /opt/seed7/src && make -f mk_linux.mak depend && make -f mk_linux.mak -j"$(nproc)" && make -f mk_linux.mak install
+# nesC 1.4.0 (TinyOS nescc), from source: needs gperf; gcc 15 needs the old C rules; serial make (-j breaks it).
+# The step runs nescc -gcc=gcc-14 (gcc 15 headers use C23 nullptr, which nesC cannot parse).
+RUN apt-get -qq install -y gperf gcc-14 && apt-get clean && git clone -q --depth 1 -b v1.4.0 https://github.com/tinyos/nesc.git /opt/nesc && cd /opt/nesc && ./Bootstrap && ./configure CFLAGS='-O2 -std=gnu17 -Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=implicit-function-declaration' && make && make install

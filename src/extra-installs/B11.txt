@@ -1,0 +1,13 @@
+# B11: array languages. All pinned.
+# Uiua 0.19.1 from crates.io (Rust build, about 6.5 min).
+RUN cargo install uiua --version 0.19.1 --locked --root /opt/uiua > /tmp/uiua-build.log 2>&1 && ln -s /opt/uiua/bin/uiua /usr/local/bin/uiua && uiua --version
+# CBQN v0.9.0 (BQN) source build. Merge fix: B07 Odin links /usr/local/bin/clang -> gcc, and gcc rejects CBQN's -mllvm flags, so use the real clang by full path.
+RUN apt-get update -qq && apt-get install -y -qq clang > /dev/null && git clone -q --depth 1 -b v0.9.0 https://github.com/dzaima/CBQN /opt/cbqn && make -C /opt/cbqn CC=/usr/bin/clang > /tmp/cbqn-build.log 2>&1 && ln -s /opt/cbqn/BQN /usr/local/bin/bqn && bqn -p 1+1
+# J 9.7 (jsoftware's Linux tarball has no version in its name: sha256 pinned). jconsole -> ijconsole (the JDK has a jconsole).
+RUN curl -fsSL -o /tmp/j97.tgz https://www.jsoftware.com/download/j9.7/install/j9.7_linux64.tar.gz && echo "1c0cf450b45f563d7408a6c93563006782da8b422e0769781eb8731c465ffd06  /tmp/j97.tgz" | sha256sum -c && tar -xzf /tmp/j97.tgz -C /opt && rm /tmp/j97.tgz && ln -s /opt/j9.7/bin/jconsole /usr/local/bin/ijconsole
+# ngn/k at a pinned commit, built without -march=native (portable); clang as upstream uses.
+RUN apt-get update -qq && apt-get install -y -qq clang > /dev/null && git clone -q https://codeberg.org/ngn/k /opt/ngnk && cd /opt/ngnk && git checkout -q b9eeb91e0343ef6029f59d55dd98f82667b9bd59 && make a N=k R=k O=-O3 L='-lm -ldl' CC=/usr/bin/clang > /tmp/ngnk-build.log 2>&1 && ln -s /opt/ngnk/k /usr/local/bin/ngnk
+# Klong 20221212 (sha256 pinned).
+RUN curl -fsSL -o /tmp/klong.tgz https://t3x.org/klong/klong20221212.tgz && echo "5e1a4877228a3c643a99dbfd2d73e60bc3fa856e2615ac2fe78c80370e7f96b4  /tmp/klong.tgz" | sha256sum -c && mkdir -p /opt/klong && tar -xzf /tmp/klong.tgz -C /opt/klong --strip-components=1 && make -C /opt/klong > /tmp/klong-build.log 2>&1 && ln -s /opt/klong/kg /usr/local/bin/kg
+# Q'Nial 7 core at a pinned commit (CMake 4 needs the policy floor; GCC 15 needs -std=gnu17 for its ctime call).
+RUN git clone -q https://github.com/niallang/Nial_Development /opt/nial && cd /opt/nial && git checkout -q cdd6e8158814e96d063b921715de91e038191ead && CMAKE_POLICY_VERSION_MINIMUM=3.5 CFLAGS=-std=gnu17 make nialcore > /tmp/nial-build.log 2>&1 && ln -s /opt/nial/nialcore /usr/local/bin/nial

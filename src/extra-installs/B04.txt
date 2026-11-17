@@ -1,0 +1,14 @@
+# B04 (JVM): Dockerfile lines for installs with no apt package. Every version is pinned.
+RUN chronic apt-get -qq install -y unzip ant && chronic apt-get clean
+# Fantom 1.0.84
+RUN curl -fsSL -o /tmp/fan.zip https://github.com/fantom-lang/fantom/releases/download/v1.0.84/fantom-1.0.84.zip && unzip -q /tmp/fan.zip -d /opt && rm /tmp/fan.zip && chmod +x /opt/fantom-1.0.84/bin/* && printf '#!/bin/sh\nexec /opt/fantom-1.0.84/bin/fan "$@"\n' > /usr/local/bin/fan && chmod +x /usr/local/bin/fan
+# Golo 3.4.0
+RUN curl -fsSL -o /tmp/golo.zip https://github.com/eclipse-archived/golo-lang/releases/download/release/3.4.0/golo-3.4.0.zip && unzip -q /tmp/golo.zip -d /opt && rm /tmp/golo.zip && chmod +x /opt/golo-3.4.0/bin/* && printf '#!/bin/sh\nexec /opt/golo-3.4.0/bin/golo "$@"\n' > /usr/local/bin/golo && chmod +x /usr/local/bin/golo
+# Yeti, built from source at a pinned commit (ant fetches ASM 9.9.1 and checks its SHA-256)
+RUN curl -fsSL -o /tmp/yeti.tgz https://github.com/mth/yeti/archive/45f939babffacf73f6c3980867f6ca94e14b093f.tar.gz && tar xzf /tmp/yeti.tgz -C /opt && mv /opt/yeti-45f939babffacf73f6c3980867f6ca94e14b093f /opt/yeti && rm /tmp/yeti.tgz && cd /opt/yeti && ant -q jar && printf '#!/bin/sh\nexec java -jar /opt/yeti/yeti.jar "$@"\n' > /usr/local/bin/yeti && chmod +x /usr/local/bin/yeti
+# Ballerina 2201.14.1 (Swan Lake) with ballerina/io 1.8.3 pulled at build time, so the lap needs no network
+RUN curl -fsSL -o /tmp/bal.deb https://github.com/ballerina-platform/ballerina-distribution/releases/download/v2201.14.1/ballerina-2201.14.1-swan-lake-linux-x64.deb && dpkg -i /tmp/bal.deb && rm /tmp/bal.deb && bal pull ballerina/io:1.8.3
+# Gosu 1.18.14
+RUN curl -fsSL -o /tmp/gosu.zip https://repo1.maven.org/maven2/org/gosu-lang/gosu/gosu/1.18.14/gosu-1.18.14-full.zip && unzip -q /tmp/gosu.zip -d /opt && rm /tmp/gosu.zip && chmod +x /opt/gosu-1.18.14/bin/* && printf '#!/bin/sh\nexec /opt/gosu-1.18.14/bin/gosu "$@"\n' > /usr/local/bin/gosu && chmod +x /usr/local/bin/gosu
+# Frege 3.25.84
+RUN curl -fsSL -o /usr/local/lib/frege.jar https://github.com/Frege/frege/releases/download/3.25alpha/frege3.25.84.jar && printf '#!/bin/sh\nexec java -Xss32m -jar /usr/local/lib/frege.jar "$@"\n' > /usr/local/bin/frege && chmod +x /usr/local/bin/frege

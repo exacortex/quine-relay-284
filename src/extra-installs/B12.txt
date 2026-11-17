@@ -1,0 +1,12 @@
+# B12: Dockerfile lines for installs with no apt package. Pin versions.
+# e.g. RUN curl -fsSL --retry 6 --retry-delay 10 --retry-all-errors https://.../tool-1.2.3-linux-x86_64.tar.gz | tar -xz -C /opt && ln -s /opt/tool-1.2.3/bin/tool /usr/local/bin/tool
+# REDUCE (CSL) 2026-03-08 snapshot .deb from SourceForge (sha256 pinned).
+RUN curl -fsSL --retry 6 --retry-delay 10 --retry-all-errors -o /tmp/reduce.deb "https://sourceforge.net/projects/reduce-algebra/files/snapshot_2026-03-08/linux64/reduce-complete_2026-03-08_amd64.deb/download" && echo "fcf171b0f7509aa187f185966195a0761c11a00d862db4981f65d4ffd9388cf4  /tmp/reduce.deb" | sha256sum -c && apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq /tmp/reduce.deb > /dev/null && rm /tmp/reduce.deb && which redcsl
+# Frink: frinklang.org serves only the current jar (no version URLs), so it is pinned by sha256; Java is already in qr157.
+# Merge fix (248 lap 5): frinklang.org refused TLS from the PC, so the same pinned jar is copied from the qr-b12 image (FETCH frink jar.bat) and checked against the same sha256.
+COPY vendor/frink/frink.jar /opt/frink/frink.jar
+RUN echo "ca267b62466eb46ac1b323b279c83634fa42b631d22f1bf261cc2609f1b1ccb0  /opt/frink/frink.jar" | sha256sum -c
+# Mathics3 10.0.1 (pip).
+RUN pip install --break-system-packages -q mathics3==10.0.1 && mathics --version | head -1
+# Numbat 1.24.0 (cargo).
+RUN cargo install numbat-cli --version 1.24.0 --locked --root /opt/numbat > /tmp/numbat-build.log 2>&1 && ln -s /opt/numbat/bin/numbat /usr/local/bin/numbat && numbat --version

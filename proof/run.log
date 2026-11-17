@@ -1,0 +1,2024 @@
+
+##########################
+##  1: Ruby -> SNOBOL4  ##
+##########################
+
+ruby QR.rb > QR.sno
+
+############################
+##  2: SNOBOL4 -> Simula  ##
+############################
+
+snobol4 -b QR.sno > QR.sim
+
+###########################
+##  3: Simula -> Oberon  ##
+###########################
+
+rm -f QR QR.c
+cim -q QR.sim >/dev/null 2>&1
+./QR > QR.obn
+rm -f QR QR.c
+
+#############################
+##  4: Oberon -> Euphoria  ##
+#############################
+
+rm -rf QR .obnc
+obnc QR.obn >/dev/null
+./QR > QR.ex
+rm -rf QR .obnc
+
+###############################
+##  5: Euphoria -> ALGOL 60  ##
+###############################
+
+eui QR.ex > QR.alg
+
+###########################
+##  6: ALGOL 60 -> BCPL  ##
+###########################
+
+marst QR.alg -o QR.alg.c
+gcc QR.alg.c -lalgol -lm -o QR
+./QR < QR.alg > QR.b
+rm -f QR QR.alg.c
+
+############################
+##  7: BCPL -> K (ngn/k)  ##
+############################
+
+rm -f QR QR.out
+BCPLROOT=/opt/BCPL/cintcode BCPLPATH=/opt/BCPL/cintcode/cin64 BCPLHDRS=/opt/BCPL/cintcode/g BCPLSCRIPTS=/opt/BCPL/cintcode/s /opt/BCPL/cintcode/bin/cintsys64 -c 'bcpl QR.b to QR; QR' >/dev/null
+cat QR.out > QR.k.k
+rm -f QR QR.out
+
+#######################################
+##  8: K (ngn/k) -> BASIC (bwBASIC)  ##
+#######################################
+
+ngnk QR.k.k < /dev/null > QR.bas
+
+###################################
+##  9: BASIC (bwBASIC) -> ChucK  ##
+###################################
+
+bwbasic QR.bas > /dev/null; cat QR.out > QR.ck
+
+#########################
+##  10: ChucK -> dash  ##
+#########################
+
+chuck --silent QR.ck > QR.dash
+
+#########################
+##  11: dash -> groff  ##
+#########################
+
+dash QR.dash > QR.roff
+
+#######################
+##  12: groff -> Hy  ##
+#######################
+
+groff -z QR.roff 2> QR.hy
+
+#########################
+##  13: Hy -> Jsonnet  ##
+#########################
+
+hy QR.hy > QR.jsonnet
+
+##############################
+##  14: Jsonnet -> newLISP  ##
+##############################
+
+jsonnet -S QR.jsonnet > QR.nl
+
+##########################
+##  15: newLISP -> NQP  ##
+##########################
+
+newlisp -n QR.nl > QR.nqp
+
+###########################
+##  16: NQP -> PicoLisp  ##
+###########################
+
+nqp QR.nqp > QR.l
+
+##############################
+##  17: PicoLisp -> Racket  ##
+##############################
+
+pil QR.l > QR.rkt
+
+##################################
+##  18: Racket -> SQL (SQLite)  ##
+##################################
+
+racket QR.rkt > QR.sql
+
+#####################################
+##  19: SQL (SQLite) -> AspectC++  ##
+#####################################
+
+sqlite3 < QR.sql > QR.cc
+
+##########################################
+##  20: AspectC++ -> Parrot asm (PASM)  ##
+##########################################
+
+ag++ --keywords -o QR QR.cc
+./QR > QR.pasm
+
+######################################
+##  21: Parrot asm (PASM) -> xonsh  ##
+######################################
+
+parrot QR.pasm > QR.xsh
+
+#########################
+##  22: xonsh -> mksh  ##
+#########################
+
+xonsh --no-rc QR.xsh > QR.mksh
+
+###############################
+##  23: mksh -> BusyBox ash  ##
+###############################
+
+mksh QR.mksh > QR.bbash
+
+#################################
+##  24: BusyBox ash -> Arturo  ##
+#################################
+
+busybox ash QR.bbash > QR.art
+
+##########################
+##  25: Arturo -> yash  ##
+##########################
+
+arturo QR.art < /dev/null > QR.yash
+
+#############################
+##  26: yash -> YueScript  ##
+#############################
+
+ulimit -s unlimited && yash QR.yash > QR.yue
+
+###############################
+##  27: YueScript -> Elvish  ##
+###############################
+
+yue -e QR.yue > QR.elv
+
+##########################
+##  28: Elvish -> Rocq  ##
+##########################
+
+elvish QR.elv > QR_rocq.v
+
+##########################
+##  29: Rocq -> Lean 4  ##
+##########################
+
+coqc QR_rocq.v
+File "./QR_rocq.v", line 17, characters 0-29:
+Warning: Setting extraction output directory by default to
+"/usr/local/share/quine-relay". Use "Set Extraction Output Directory" or
+command line option "-output-directory" to set a different directory for
+extracted files to appear in.
+[extraction-default-directory,extraction,default]
+printf 'module Pstring=struct let unsafe_of_string s=s end\n' | cat - QR_rocq.ml > QR_rocq_run.ml
+ocaml QR_rocq_run.ml > QR.lean
+rm -f QR_rocq.ml QR_rocq_run.ml QR_rocq.vo QR_rocq.vok QR_rocq.vos QR_rocq.glob
+
+#############################
+##  30: Lean 4 -> Idris 2  ##
+#############################
+
+lean --run QR.lean > QR.idr
+
+########################
+##  31: Idris 2 -> V  ##
+########################
+
+idris2 --exec main QR.idr > QR.vlang.v
+
+#####################
+##  32: V -> Hare  ##
+#####################
+
+v run QR.vlang.v > QR.ha
+
+######################
+##  33: Hare -> C3  ##
+######################
+
+hare build -q -o QR QR.ha
+./QR > QR.c3
+
+#######################
+##  34: C3 -> Nelua  ##
+#######################
+
+c3c compile QR.c3 -o QR
+c3c: /lib/x86_64-linux-gnu/libxml2.so.2: no version information available (required by c3c)
+c3c: /lib/x86_64-linux-gnu/libxml2.so.2: no version information available (required by c3c)
+Program linked to executable 'QR'.
+./QR > QR.nelua
+
+########################
+##  35: Nelua -> Zig  ##
+########################
+
+nelua --no-cache QR.nelua > QR.zig
+
+#############################
+##  36: Zig -> PowerShell  ##
+#############################
+
+zig run QR.zig > QR.ps1
+
+#################################
+##  37: PowerShell -> Nushell  ##
+#################################
+
+DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 POWERSHELL_TELEMETRY_OPTOUT=1 pwsh -NoProfile -NonInteractive -File QR.ps1 > QR.nu
+
+##########################
+##  38: Nushell -> Ion  ##
+##########################
+
+nu --no-config-file QR.nu > QR.ion
+
+######################
+##  39: Ion -> YSH  ##
+######################
+
+ion QR.ion > QR.ysh
+
+########################
+##  40: YSH -> Murex  ##
+########################
+
+ysh QR.ysh > QR.mx
+
+#########################
+##  41: Murex -> Hush  ##
+#########################
+
+murex QR.mx > QR.hsh
+
+######################
+##  42: Hush -> es  ##
+######################
+
+hush QR.hsh > QR.es
+
+#####################
+##  43: es -> Boo  ##
+#####################
+
+es QR.es > QR.boo
+
+#######################
+##  44: Boo -> VHDL  ##
+#######################
+
+booi QR.boo > QR.vhdl
+
+#########################
+##  45: VHDL -> Genie  ##
+#########################
+
+ghdl -a QR.vhdl
+ghdl -e qr
+ghdl -r qr > QR.genie.gs
+
+########################
+##  46: Genie -> Nix  ##
+########################
+
+valac QR.genie.gs
+./QR.genie > QR.nix
+
+#########################
+##  47: Nix -> XQuery  ##
+#########################
+
+nix eval --extra-experimental-features nix-command --raw --file QR.nix > QR.xq
+
+#########################
+##  48: XQuery -> Pkl  ##
+#########################
+
+basex QR.xq > QR.pkl
+[warning] /usr/bin/basex: Unable to locate /usr/share/java/tagsoup.jar in /usr/share/java
+[warning] /usr/bin/basex: Unable to locate /usr/share/java/xml-resolver.jar in /usr/share/java
+[warning] /usr/bin/basex: Unable to locate /usr/share/java/jing.jar in /usr/share/java
+/root/basex/.basex: writing new configuration file.
+
+#######################
+##  49: Pkl -> Koto  ##
+#######################
+
+pkl eval QR.pkl > QR.koto
+
+#######################
+##  50: Koto -> CUE  ##
+#######################
+
+koto QR.koto > QR.cue
+
+############################
+##  51: CUE -> Macaulay2  ##
+############################
+
+cue export --out text -e o QR.cue > QR.m2
+
+#############################
+##  52: Macaulay2 -> Dart  ##
+#############################
+
+M2 --script QR.m2 > QR.dart
+
+########################
+##  53: Dart -> Anko  ##
+########################
+
+dart run QR.dart > QR.ank
+
+#########################
+##  54: Anko -> Tengo  ##
+#########################
+
+anko QR.ank > QR.tengo
+
+###########################
+##  55: Tengo -> Nickel  ##
+###########################
+
+tengo QR.tengo > QR.ncl
+
+##########################
+##  56: Nickel -> Rhai  ##
+##########################
+
+nickel export --format text QR.ncl > QR.rhai
+
+########################
+##  57: Rhai -> Rust  ##
+########################
+
+rhai-run QR.rhai > QR.rs
+
+#########################
+##  58: Rust -> Scala  ##
+#########################
+
+rustc QR.rs
+./QR > QR.scala
+
+###########################
+##  59: Scala -> Scheme  ##
+###########################
+
+scalac QR.scala
+scala QR > QR.scm
+
+############################
+##  60: Scheme -> Scilab  ##
+############################
+
+guile QR.scm > QR.sci
+;;; note: auto-compilation is enabled, set GUILE_AUTO_COMPILE=0
+;;;       or pass the --no-auto-compile argument to disable.
+;;; compiling /usr/local/share/quine-relay/QR.scm
+;;; compiled /root/.cache/guile/ccache/3.0-LE-8-4.7/usr/local/share/quine-relay/QR.scm.go
+
+#########################
+##  61: Scilab -> sed  ##
+#########################
+
+scilab-cli -nb -f QR.sci > QR.sed
+
+##############################
+##  62: sed -> Shakespeare  ##
+##############################
+
+sed -E -f QR.sed QR.sed > QR.spl
+
+#################################
+##  63: Shakespeare -> S-Lang  ##
+#################################
+
+spl2c < QR.spl > QR.spl.c
+gcc -z muldefs -o QR -I ./vendor/local/include -L ./vendor/local/lib QR.spl.c -lspl -lm
+./QR > QR.sl
+
+##############################
+##  64: S-Lang -> Squirrel  ##
+##############################
+
+slsh QR.sl > QR.nut
+
+###################################
+##  65: Squirrel -> Standard ML  ##
+###################################
+
+squirrel QR.nut > QR.sml
+
+#################################
+##  66: Standard ML -> Subleq  ##
+#################################
+
+polyc -o QR QR.sml
+./QR > QR.sq
+
+#################################
+##  67: Subleq -> SurgeScript  ##
+#################################
+
+ruby vendor/subleq.rb QR.sq > QR.ss
+
+################################
+##  68: SurgeScript -> Swift  ##
+################################
+
+surgescript QR.ss > QR.swift
+
+########################
+##  69: Swift -> Tcl  ##
+########################
+
+swiftc QR.swift
+./QR > QR.tcl
+
+#######################
+##  70: Tcl -> tcsh  ##
+#######################
+
+tclsh QR.tcl > QR.tcsh
+
+########################
+##  71: tcsh -> Thue  ##
+########################
+
+tcsh QR.tcsh > QR.t
+
+##############################
+##  72: Thue -> TypeScript  ##
+##############################
+
+ruby vendor/thue.rb QR.t > QR.ts
+
+##################################
+##  73: TypeScript -> Unlambda  ##
+##################################
+
+tsc --outFile QR.ts.js QR.ts
+nodejs QR.ts.js > QR.unl
+
+###############################
+##  74: Unlambda -> Verilog  ##
+###############################
+
+ruby vendor/unlambda.rb QR.unl > QR.v
+
+#################################
+##  75: Verilog -> ><> (Fish)  ##
+#################################
+
+iverilog -o QR QR.v
+./QR -vcd-none > QR.fish.fish
+
+##################################
+##  76: ><> (Fish) -> Hexagony  ##
+##################################
+
+python3 vendor/fish.py QR.fish.fish > QR.hxg
+
+#################################
+##  77: Hexagony -> Vimscript  ##
+#################################
+
+ruby vendor/hexagony.rb QR.hxg > QR.vim
+
+#####################################
+##  78: Vimscript -> Visual Basic  ##
+#####################################
+
+vim -EsS QR.vim > QR.vb
+
+#######################################################
+##  79: Visual Basic -> WebAssembly (Binary format)  ##
+#######################################################
+
+echo '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup><ItemGroup><Compile Include="QR.vb" /></ItemGroup></Project>' > tmp.vbproj
+DOTNET_NOLOGO=1 dotnet run --project tmp.vbproj > QR.wasm
+
+####################################################################
+##  80: WebAssembly (Binary format) -> WebAssembly (Text format)  ##
+####################################################################
+
+node --experimental-wasi-unstable-preview1 vendor/wasi-runtime.js QR.wasm > QR.wat
+(node:1459) ExperimentalWarning: WASI is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+###################################################
+##  81: WebAssembly (Text format) -> Whitespace  ##
+###################################################
+
+wat2wasm QR.wat -o QR.wat.wasm
+node --experimental-wasi-unstable-preview1 vendor/wasi-runtime.js QR.wat.wasm > QR.ws
+(node:1475) ExperimentalWarning: WASI is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+##############################
+##  82: Whitespace -> XSLT  ##
+##############################
+
+ruby vendor/whitespace.rb QR.ws > QR.xslt
+
+#######################
+##  83: XSLT -> ///  ##
+#######################
+
+xsltproc QR.xslt > QR.slashes
+
+#######################
+##  84: /// -> CJam  ##
+#######################
+
+ruby vendor/slashes.rb QR.slashes > QR.cjam
+
+#############################
+##  85: CJam -> Underload  ##
+#############################
+
+ruby vendor/cjam.rb QR.cjam > QR.ul
+
+###################################
+##  86: Underload -> Brain-Flak  ##
+###################################
+
+ruby vendor/underload.rb QR.ul > QR.bflk
+
+#################################
+##  87: Brain-Flak -> Yabasic  ##
+#################################
+
+ruby vendor/brain_flak.rb -A QR.bflk > QR.yab
+
+#############################
+##  88: Yabasic -> Yorick  ##
+#############################
+
+yabasic QR.yab > QR.yorick
+
+##############################
+##  89: Yorick -> Singular  ##
+##############################
+
+yorick -batch QR.yorick > QR.sing
+
+##############################
+##  90: Singular -> FriCAS  ##
+##############################
+
+Singular -q QR.sing > QR.input
+
+##########################
+##  91: FriCAS -> Zoem  ##
+##########################
+
+fricas -nosman < QR.input > /dev/null
+cat QR_fricas.out > QR.azm
+
+########################
+##  92: Zoem -> Nial  ##
+########################
+
+zoem -i QR.azm > QR.ndf
+[zoem] read chunk of size <1486989>
+[zoem] read chunk of size <0>
+
+#######################
+##  93: Nial -> zsh  ##
+#######################
+
+nial -defs QR.ndf < /dev/null > QR.zsh
+
+#######################
+##  94: zsh -> Uiua  ##
+#######################
+
+zsh QR.zsh > QR.ua
+
+#######################
+##  95: Uiua -> BQN  ##
+#######################
+
+uiua run --no-format QR.ua > QR.bqn
+
+#########################
+##  96: BQN -> Fantom  ##
+#########################
+
+bqn QR.bqn > QR.fan
+
+##########################
+##  97: Fantom -> Golo  ##
+##########################
+
+fan QR.fan > QR.golo
+
+#############################
+##  98: Golo -> Ballerina  ##
+#############################
+
+golo golo --files QR.golo > QR.bal
+
+#############################
+##  99: Ballerina -> Yeti  ##
+#############################
+
+bal run --offline QR.bal > QR.yeti
+Compiling source
+	QR.bal
+
+Running executable
+
+
+#########################
+##  100: Yeti -> Gosu  ##
+#########################
+
+yeti QR.yeti > QR.gsp
+
+##########################
+##  101: Gosu -> Frege  ##
+##########################
+
+gosu QR.gsp > QR.fr
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by manifold.util.ReflectUtil (file:/opt/gosu-1.18.14/lib/manifold-util-2024.1.38.jar)
+WARNING: Please consider reporting this to the maintainers of class manifold.util.ReflectUtil
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+
+#########################
+##  102: Frege -> Ada  ##
+#########################
+
+mkdir -p frege-out
+frege -d frege-out QR.fr
+calling: javac -cp /usr/local/lib/frege.jar:frege-out -d frege-out -sourcepath . -encoding UTF-8 frege-out/QR.java 
+java -cp frege-out:/usr/local/lib/frege.jar QR > qr.adb
+
+#########################
+##  103: Ada -> AFNIX  ##
+#########################
+
+gnatmake qr.adb
+x86_64-linux-gnu-gcc-14 -c qr.adb
+x86_64-linux-gnu-gnatbind-14 -x qr.ali
+x86_64-linux-gnu-gnatlink-14 qr.ali
+./qr > QR.als
+
+###########################
+##  104: AFNIX -> Aheui  ##
+###########################
+
+LANG=C LD_LIBRARY_PATH=/usr/lib/afnix axi QR.als > QR.aheui
+
+#######################
+##  105: Aheui -> J  ##
+#######################
+
+ruby vendor/aheui.rb QR.aheui > QR.ijs
+
+##########################
+##  106: J -> ALGOL 68  ##
+##########################
+
+ijconsole QR.ijs < /dev/null > QR.a68
+
+#############################
+##  107: ALGOL 68 -> Ante  ##
+#############################
+
+a68g --heap 512M QR.a68 > QR.ante
+
+#############################
+##  108: Ante -> Starlark  ##
+#############################
+
+ruby vendor/ante.rb QR.ante > QR.star
+
+################################
+##  109: Starlark -> AspectJ  ##
+################################
+
+starlark QR.star 2> QR.aj
+
+############################
+##  110: AspectJ -> Teal  ##
+############################
+
+ajc QR.aj
+[warning] bad version number found in /usr/share/java/aspectjrt.jar expected 1.9.6 found null
+	
+
+1 warning
+java QR > QR.tl
+
+##############################
+##  111: Teal -> Asymptote  ##
+##############################
+
+tl run QR.tl > QR.asy
+
+##############################
+##  112: Asymptote -> Umka  ##
+##############################
+
+asy QR.asy > QR.um
+
+#######################
+##  113: Umka -> F*  ##
+#######################
+
+umka QR.um > QR.fst
+
+######################
+##  114: F* -> ATS  ##
+######################
+
+fstar.exe --cache_checked_modules --cache_dir fst_out QR.fst > /dev/null
+fstar.exe --cache_dir fst_out --odir fst_out --codegen OCaml --custard_main QR.main QR.fst > /dev/null
+ocaml fst_out/Custard.ml > QR.dats
+
+##############################
+##  115: ATS -> MoonScript  ##
+##############################
+
+patscc -o QR QR.dats
+./QR > QR.moon
+
+##############################
+##  116: MoonScript -> Awk  ##
+##############################
+
+moon QR.moon > QR.awk
+
+########################
+##  117: Awk -> Rego  ##
+########################
+
+awk -f QR.awk > QR.rego
+
+############################
+##  118: Rego -> Mathics  ##
+############################
+
+opa eval --format raw -d QR.rego data.qr.x > QR.wl
+
+############################
+##  119: Mathics -> bash  ##
+############################
+
+mathics -q --no-completion -f QR.wl < /dev/null > QR.bash
+
+#######################
+##  120: bash -> bc  ##
+#######################
+
+bash QR.bash > QR.bc
+
+########################
+##  121: bc -> Berry  ##
+########################
+
+BC_LINE_LENGTH=4000000 bc -q QR.bc > QR.be
+
+#######################
+##  122: Berry -> C  ##
+#######################
+
+berry QR.be > QR.c
+
+#####################
+##  123: C -> C++  ##
+#####################
+
+cc -o QR QR.c
+./QR > QR.cpp
+
+########################
+##  124: C++ -> Pyth  ##
+########################
+
+g++ -o QR QR.cpp
+./QR > QR.pyth
+
+#############################
+##  125: Pyth -> Emmental  ##
+#############################
+
+python3 /opt/pyth/pyth.py -n QR.pyth > QR.emmental
+
+################################
+##  126: Emmental -> ArnoldC  ##
+################################
+
+ruby vendor/emmental.rb QR.emmental > QR.arnoldc
+
+###########################
+##  127: ArnoldC -> LFE  ##
+###########################
+
+rm -f QR.class
+java -jar /opt/ArnoldC.jar QR.arnoldc
+java QR > QR.lfe
+rm -f QR.class
+
+#######################
+##  128: LFE -> Joy  ##
+#######################
+
+lfe QR.lfe > QR.joy
+
+##########################
+##  129: Joy -> Factor  ##
+##########################
+
+joy QR.joy > QR.factor
+
+#############################
+##  130: Factor -> Numbat  ##
+#############################
+
+/opt/factor/factor QR.factor > QR.nbt
+
+#########################
+##  131: Numbat -> C#  ##
+#########################
+
+numbat QR.nbt > QR.cs
+
+#######################
+##  132: C# -> Chef  ##
+#######################
+
+echo '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup><ItemGroup><Compile Include="QR.cs" /></ItemGroup></Project>' > tmp.csproj
+DOTNET_NOLOGO=1 dotnet run --project tmp.csproj > QR.chef
+
+##########################
+##  133: Chef -> Frink  ##
+##########################
+
+PERL5LIB=vendor/local/lib/perl5 compilechef QR.chef QR.chef.pl
+perl QR.chef.pl > QR.frink
+
+#############################
+##  134: Frink -> Clojure  ##
+#############################
+
+java -cp /opt/frink/frink.jar frink.parser.Frink QR.frink > QR.clj
+
+#############################
+##  135: Clojure -> CMake  ##
+#############################
+
+clojure QR.clj > QR.cmake
+
+###########################
+##  136: CMake -> Cobol  ##
+###########################
+
+cmake -P QR.cmake > QR.cob
+
+##########################
+##  137: Cobol -> Ring  ##
+##########################
+
+cobc -O2 -x QR.cob
+./QR > QR.ring
+
+#################################
+##  138: Ring -> CoffeeScript  ##
+#################################
+
+ring QR.ring > QR.coffee
+
+########################################
+##  139: CoffeeScript -> Common Lisp  ##
+########################################
+
+coffee --nodejs --stack_size=100000 QR.coffee > QR.lisp
+
+###################################
+##  140: Common Lisp -> Crystal  ##
+###################################
+
+clisp QR.lisp > QR.cr
+
+#########################
+##  141: Crystal -> D  ##
+#########################
+
+crystal QR.cr > QR.d
+
+####################
+##  142: D -> dc  ##
+####################
+
+gdc -o QR QR.d
+./QR > QR.dc
+
+########################
+##  143: dc -> Dhall  ##
+########################
+
+dc QR.dc > QR.dhall || true
+
+############################
+##  144: Dhall -> Elixir  ##
+############################
+
+dhall text --file QR.dhall > QR.exs
+
+#################################
+##  145: Elixir -> Emacs Lisp  ##
+#################################
+
+elixir QR.exs > QR.el
+
+#################################
+##  146: Emacs Lisp -> Erlang  ##
+#################################
+
+emacs -Q --script QR.el > QR.erl
+
+###############################
+##  147: Erlang -> Execline  ##
+###############################
+
+escript QR.erl > QR.e
+
+###########################
+##  148: Execline -> F#  ##
+###########################
+
+execlineb QR.e > QR.fsx
+
+########################
+##  149: F# -> FALSE  ##
+########################
+
+echo '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup><ItemGroup><Compile Include="QR.fsx" /></ItemGroup></Project>' > tmp.fsproj
+DOTNET_NOLOGO=1 dotnet run --project tmp.fsproj > QR.false
+
+############################
+##  150: FALSE -> Fennel  ##
+############################
+
+ruby vendor/false.rb QR.false > QR.fnl
+
+###########################
+##  151: Fennel -> Flex  ##
+###########################
+
+fennel QR.fnl > QR.fl
+
+#########################
+##  152: Flex -> Fish  ##
+#########################
+
+flex -o QR.fl.c QR.fl
+gcc -o QR QR.fl.c
+QR.fl: In function 'main':
+QR.fl:3:439978: warning: trigraph '??<' ignored, use '-trigraphs' to enable [-Wtrigraphs]
+    3 | %%
+./QR > QR.fish
+
+##########################
+##  153: Fish -> Forth  ##
+##########################
+
+fish QR.fish > QR.fs
+
+###############################
+##  154: Forth -> FORTRAN77  ##
+###############################
+
+gforth QR.fs > QR.f
+
+###################################
+##  155: FORTRAN77 -> Fortran90  ##
+###################################
+
+gfortran -o QR QR.f
+./QR > QR.f90
+
+#######################################
+##  156: Fortran90 -> Gambas script  ##
+#######################################
+
+gfortran -o QR QR.f90
+./QR > QR.gbs
+
+#################################
+##  157: Gambas script -> GAP  ##
+#################################
+
+gbs3 QR.gbs > QR.g
+
+#######################
+##  158: GAP -> GDB  ##
+#######################
+
+gap -q QR.g > QR.gdb
+
+################################
+##  159: GDB -> GEL (Genius)  ##
+################################
+
+gdb -q -x QR.gdb > QR.gel
+
+####################################
+##  160: GEL (Genius) -> Gnuplot  ##
+####################################
+
+genius QR.gel > QR.plt
+
+##########################
+##  161: Gnuplot -> Go  ##
+##########################
+
+gnuplot QR.plt > QR.go
+
+#############################
+##  162: Go -> GolfScript  ##
+#############################
+
+go run QR.go > QR.gs
+
+#####################################
+##  163: GolfScript -> G-Portugol  ##
+#####################################
+
+ruby vendor/golfscript.rb QR.gs > QR.gpt
+
+################################
+##  164: G-Portugol -> Grass  ##
+################################
+
+mv QR.c QR.c.bak
+gpt -t QR.c QR.gpt
+gcc -o QR QR.c
+./QR > QR.grass
+mv QR.c.bak QR.c
+
+###########################
+##  165: Grass -> Janet  ##
+###########################
+
+ruby vendor/grass.rb QR.grass > QR.janet
+
+############################
+##  166: Janet -> Groovy  ##
+############################
+
+janet QR.janet > QR.groovy
+
+###########################
+##  167: Groovy -> Gzip  ##
+###########################
+
+groovy QR.groovy > QR.gz
+
+#######################
+##  168: Gzip -> Io  ##
+#######################
+
+gzip -cd QR.gz > QR.io
+
+##########################
+##  169: Io -> Haskell  ##
+##########################
+
+io QR.io > QR.hs
+
+#############################
+##  170: Haskell -> Picat  ##
+#############################
+
+rm -f QR.o
+ghc QR.hs
+[1 of 2] Compiling Main             ( QR.hs, QR.o )
+[2 of 2] Linking QR [Objects changed]
+./QR > QR.pi
+
+##########################
+##  171: Picat -> Haxe  ##
+##########################
+
+picat QR.pi > QR.hx
+
+##########################
+##  172: Haxe -> CLIPS  ##
+##########################
+
+haxe -main QR -neko QR.n
+neko QR.n > QR.clp
+
+##########################
+##  173: CLIPS -> Icon  ##
+##########################
+
+clips -f2 QR.clp > QR.icn
+
+#############################
+##  174: Icon -> INTERCAL  ##
+#############################
+
+icont -s QR.icn
+./QR > QR.i
+
+#############################
+##  175: INTERCAL -> Wren  ##
+#############################
+
+ick -bfOc QR.i
+gcc -std=c99 -static QR.c -I /usr/include/ick-* -o QR -lick
+./QR > QR.wren
+
+###########################
+##  176: Wren -> Jasmin  ##
+###########################
+
+wren_cli QR.wren > QR.j
+
+#################################
+##  177: Jasmin -> PureScript  ##
+#################################
+
+jasmin QR.j
+java QR > QR.purs
+
+##############################
+##  178: PureScript -> Elm  ##
+##############################
+
+purs compile -o /opt/purs/out QR.purs '/opt/purs/lib/*/src/**/*.purs'
+[1 of 1] Compiling QR
+Warning found:
+in module QR
+at QR.purs:3:1 - 6:454361 (line 3, column 1 - line 6, column 454361)
+
+  No type declaration was provided for the top-level declaration of main.
+  It is good practice to provide type declarations as a form of documentation.
+  The inferred type of main was:
+
+    Effect Unit
+
+
+in value declaration main
+
+See https://github.com/purescript/documentation/blob/master/errors/MissingTypeDeclaration.md for more information,
+or to contribute content related to this warning.
+
+
+node /opt/purs/run.mjs > QR.elm
+
+#########################
+##  179: Elm -> Pyret  ##
+#########################
+
+cp QR.elm /opt/elm/src/QR.elm
+cd /opt/elm; elm make src/QR.elm --output=/usr/local/share/quine-relay/QR.elm.js
+Compiling ...
+Compiling (1)
+Success! Compiled 1 module.
+
+    QR ───> /usr/local/share/quine-relay/QR.elm.js
+
+node -e 'require("./QR.elm.js").Elm.QR.init().ports.o.subscribe(s=>process.stdout.write(s))' > QR.arr
+Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.1/optimize for better performance and smaller assets.
+
+##############################
+##  180: Pyret -> ReScript  ##
+##############################
+
+pyretc QR.arr QR.jarr
+Gathering dependencies...
+                         
+Compiling worklist...
+                     
+Loading existing compiled modules...
+                                    
+Compiling 1/1: QR.arr
+                     
+1/1 modules compiled (QR.arr)
+Cleaning up and generating standalone...
+NODE_PATH=/opt/b05/node_modules node QR.jarr > QR.res
+
+#############################
+##  181: ReScript -> Wisp  ##
+#############################
+
+bsc QR.res > QR.res.js
+node QR.res.js > QR.wisp
+
+#########################
+##  182: Wisp -> Imba  ##
+#########################
+
+wisp < QR.wisp > QR.wisp.js
+node QR.wisp.js > QR.imba
+
+##########################
+##  183: Imba -> Dafny  ##
+##########################
+
+imba QR.imba > QR.dfy
+
+###########################
+##  184: Dafny -> Julia  ##
+###########################
+
+dafny build -o dafny-out/QR QR.dfy
+
+Dafny program verifier finished with 0 verified, 0 errors
+DOTNET_ROLL_FORWARD=Major dotnet dafny-out/QR.dll > QR.jl
+
+############################
+##  185: Julia -> Maxima  ##
+############################
+
+julia QR.jl > QR.mac
+
+##########################
+##  186: Maxima -> Gri  ##
+##########################
+
+maxima -q --init-mac=QR.mac > QR.gri
+SIMPLE-WARNING: Maxima is unable to set up the help system.
+(Details: CL-INFO::LOAD-PRIMARY-INDEX: Condition in CL-INFO::LOAD-PRIMARY-INDEX [or a callee]: INTERNAL-SIMPLE-FILE-ERROR: File error on #P"/usr/share/doc/maxima/info/./maxima-index.lisp": File does not exist.)
+
+SIMPLE-WARNING: Maxima is unable to set up the help system.
+(Details: CL-INFO::LOAD-PRIMARY-INDEX: Condition in CL-INFO::LOAD-PRIMARY-INDEX [or a callee]: INTERNAL-SIMPLE-FILE-ERROR: File error on #P"/usr/share/info/./maxima-index-html.lisp": File does not exist.)
+
+
+###########################
+##  187: Gri -> UCBLogo  ##
+###########################
+
+gri QR.gri > QR.logo
+
+############################
+##  188: UCBLogo -> Java  ##
+############################
+
+ucblogo QR.logo > QR.java
+
+##################################
+##  189: Java -> GNU Smalltalk  ##
+##################################
+
+javac QR.java
+java QR > QR.st
+
+########################################
+##  190: GNU Smalltalk -> JavaScript  ##
+########################################
+
+gst QR.st > QR.js
+
+#############################
+##  191: JavaScript -> Jq  ##
+#############################
+
+nodejs QR.js > QR.jq
+
+#########################
+##  192: Jq -> JSFuck  ##
+#########################
+
+jq -r -n -f QR.jq > QR.jsfuck
+
+#############################
+##  193: JSFuck -> Kotlin  ##
+#############################
+
+ulimit -s unlimited && nodejs --stack_size=100000 QR.jsfuck > QR.kt
+
+##########################
+##  194: Kotlin -> TXR  ##
+##########################
+
+kotlinc QR.kt -include-runtime -d QR.jar
+OpenJDK 64-Bit Server VM warning: Options -Xverify:none and -noverify were deprecated in JDK 13 and will likely be removed in a future release.
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.intellij.util.containers.ConcurrentIntObjectHashMap
+WARNING: Please consider reporting this to the maintainers of class com.intellij.util.containers.ConcurrentIntObjectHashMap
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by com.sun.jna.Native in an unnamed module
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+kotlin QR.jar > QR.txrlisp
+
+###########################
+##  195: TXR -> Gravity  ##
+###########################
+
+txr --lisp QR.txrlisp > QR.gravity
+
+#############################
+##  196: Gravity -> Klong  ##
+#############################
+
+gravity -q QR.gravity > QR.kg
+
+########################################################
+##  197: Klong -> GSL (Generator Scripting Language)  ##
+########################################################
+
+kg QR.kg < /dev/null > QR.gsl
+
+########################################################
+##  198: GSL (Generator Scripting Language) -> Seed7  ##
+########################################################
+
+gsl -q QR.gsl > QR.sd7
+
+###########################
+##  199: Seed7 -> Curry  ##
+###########################
+
+s7 -q QR.sd7 > QR.curry
+
+##########################
+##  200: Curry -> nesC  ##
+##########################
+
+pakcs --nocypm :load QR.curry :save :quit
+Compiling Curry program "QR"...
+
+QR.curry:1:1-1:4 Warning:
+    Top-level binding with no type signature: main :: Prelude.IO ()
+   | 
+ 1 | main=do{s<-readFile"QR.curry";putStr(f(drop 3(dropWhile(/='\n')s)))};f[]=[];f(c:r)=if c=='@'then g r else c:f r;g[]=[];g(c:r)=if c=='n'then '\n':f r else '@':f r
+   | ^^^^
+
+QR.curry:1:70 Warning:
+    Top-level binding with no type signature:
+      f :: [Prelude.Char] -> [Prelude.Char]
+   | 
+ 1 | main=do{s<-readFile"QR.curry";putStr(f(drop 3(dropWhile(/='\n')s)))};f[]=[];f(c:r)=if c=='@'then g r else c:f r;g[]=[];g(c:r)=if c=='n'then '\n':f r else '@':f r
+   |                                                                      ^
+
+QR.curry:1:113 Warning:
+    Top-level binding with no type signature:
+      g :: [Prelude.Char] -> [Prelude.Char]
+   | 
+ 1 | main=do{s<-readFile"QR.curry";putStr(f(drop 3(dropWhile(/='\n')s)))};f[]=[];f(c:r)=if c=='@'then g r else c:f r;g[]=[];g(c:r)=if c=='n'then '\n':f r else '@':f r
+   |                                                                                                                 ^
+Executable saved in: QR
+./QR > QR.nc
+
+#############################
+##  201: nesC -> LLVM asm  ##
+#############################
+
+nescc -gcc=gcc-14 -o QR QR.nc
+./QR > QR.ll
+
+###############################
+##  202: LLVM asm -> REDUCE  ##
+###############################
+
+llvm-as QR.ll
+lli QR.bc > QR.red
+
+##############################
+##  203: REDUCE -> LOLCODE  ##
+##############################
+
+redcsl -w -b < QR.red > /dev/null
+cat QR_reduce.out > QR.lol
+
+###########################
+##  204: LOLCODE -> Lua  ##
+###########################
+
+lci QR.lol > QR.lua
+
+##########################
+##  205: Lua -> Lisaac  ##
+##########################
+
+lua5.3 QR.lua > qr.li
+
+#########################
+##  206: Lisaac -> eC  ##
+#########################
+
+lisaac -gcc -Wno-implicit-function-declaration qr.li > /dev/null
+Depending pass: .......... (10)
+Executing pass: *.......*.. (11)
+ => 5 second(s).
+./qr > QR_ec.ec
+
+########################
+##  207: eC -> CDuce  ##
+########################
+
+ecp -c QR_ec.ec -o QR_ec.sym
+ecc -c QR_ec.ec -o QR_ec.c
+ecs -console QR_ec.sym QR_ec.imp -o QR_ec.main.ec
+ecp -c QR_ec.main.ec -o QR_ec.main.sym
+ecc -c QR_ec.main.ec -o QR_ec.main.c
+gcc -std=gnu17 -w -o QR_ec QR_ec.c QR_ec.main.c -lecereCOM
+./QR_ec > QR.cd
+
+########################
+##  208: CDuce -> A+  ##
+########################
+
+cduce QR.cd > QR.aplus.a
+
+#####################
+##  209: A+ -> M4  ##
+#####################
+
+a+ QR.aplus.a > QR.m4 2> /dev/null < /dev/null
+
+###########################
+##  210: M4 -> Makefile  ##
+###########################
+
+m4 QR.m4 > QR.mk
+
+#################################
+##  211: Makefile -> MiniZinc  ##
+#################################
+
+make -f QR.mk > QR.mzn
+
+#################################
+##  212: MiniZinc -> Modula-2  ##
+#################################
+
+minizinc --solver COIN-BC --soln-sep '' QR.mzn > QR.mod
+
+#############################
+##  213: Modula-2 -> MSIL  ##
+#############################
+
+gm2 -fiso QR.mod -o QR
+./QR > QR.il
+
+########################
+##  214: MSIL -> PHP  ##
+########################
+
+ilasm QR.il
+Assembling 'QR.il' , no listing file, to exe --> 'QR.exe'
+
+Operation completed successfully
+mono QR.exe > QR.php
+
+########################
+##  215: PHP -> Piet  ##
+########################
+
+php QR.php > QR.png
+
+#############################
+##  216: Piet -> Mustache  ##
+#############################
+
+npiet QR.png > QR.mustache
+
+#############################
+##  217: Mustache -> NASM  ##
+#############################
+
+mustache QR.mustache QR.mustache > QR.asm
+
+#########################
+##  218: NASM -> Neko  ##
+#########################
+
+nasm -felf QR.asm
+ld -m elf_i386 -o QR QR.o
+./QR > QR.neko
+
+###########################
+##  219: Neko -> Nickle  ##
+###########################
+
+nekoc QR.neko
+neko QR.n > QR.5c
+
+##########################
+##  220: Nickle -> Nim  ##
+##########################
+
+nickle QR.5c > QR.nim
+
+###############################
+##  221: Nim -> Objective-C  ##
+###############################
+
+nim compile QR.nim
+Hint: used config file '/etc/nim/nim.cfg' [Conf]
+Hint: used config file '/etc/nim/config.nims' [Conf]
+.....................................................................
+CC: ../../../lib/nim/lib/system/exceptions.nim
+CC: ../../../lib/nim/lib/std/private/digitsutils.nim
+CC: ../../../lib/nim/lib/system/dollars.nim
+CC: ../../../lib/nim/lib/system.nim
+CC: QR.nim
+Hint:  [Link]
+Hint: mm: orc; threads: on; opt: none (DEBUG BUILD, `-d:release` generates faster code)
+28707 lines; 0.413s; 38.188MiB peakmem; proj: /usr/local/share/quine-relay/QR.nim; out: /usr/local/share/quine-relay/QR [SuccessX]
+./QR > QR.m
+
+#################################
+##  222: Objective-C -> OCaml  ##
+#################################
+
+gcc -o QR QR.m
+./QR > QR.ml
+
+############################
+##  223: OCaml -> Falcon  ##
+############################
+
+ocaml QR.ml > QR.fal
+
+###########################
+##  224: Falcon -> Vala  ##
+###########################
+
+falcon QR.fal > QR.vala
+
+###########################
+##  225: Vala -> Velato  ##
+###########################
+
+valac QR.vala
+./QR > QR.mid
+
+##############################
+##  226: Velato -> Coconut  ##
+##############################
+
+mono vendor/local/bin/Vlt.exe /s QR.mid
+WARNING: The runtime version supported by this application is unavailable.
+Using default runtime: v4.0.30319
+mono QR.exe > QR.coco
+
+##############################
+##  227: Coconut -> Octave  ##
+##############################
+
+coconut -q -r QR.coco > QR.octave
+
+###########################
+##  228: Octave -> Ook!  ##
+###########################
+
+mv QR.m QR.m.bak
+octave -qf QR.octave > QR.ook
+warning: implicit conversion from numeric to char
+warning: called from
+    QR.octave at line 1 column 1
+
+mv QR.m.bak QR.m
+
+############################
+##  229: Ook! -> PARI/GP  ##
+############################
+
+ruby vendor/ook-to-bf.rb QR.ook QR.ook.bf
+ruby vendor/bf.rb QR.ook.bf > QR.gp
+
+#############################
+##  230: PARI/GP -> Gleam  ##
+#############################
+
+gp -f -q QR.gp > QR.gleam
+
+#########################
+##  231: Gleam -> Roc  ##
+#########################
+
+mkdir -p qrgleam/src
+cp QR.gleam qrgleam/src/qr.gleam
+printf 'name = "qr"\nversion = "1.0.0"\n' > qrgleam/gleam.toml
+(cd qrgleam; gleam run --no-print-progress) > QR.roc
+
+########################
+##  232: Roc -> Inko  ##
+########################
+
+roc build --output qrroc QR.roc
+[1;32m0[0m errors and [1;32m0[0m warnings found in 304 ms while successfully building:
+
+    qrroc
+./qrroc > QR.inko
+
+#########################
+##  233: Inko -> Koka  ##
+#########################
+
+inko run QR.inko > qr.kk
+
+###########################
+##  234: Koka -> Chapel  ##
+###########################
+
+koka -v0 -o qrkoka qr.kk
+vfs: ["/@virtual/qr/@main.kk"]
+vfs: ["/@virtual/qr/@main.kk"]
+compile : kklib from: /opt/koka/share/koka/v3.2.9/kklib
+In file included from /opt/koka/share/koka/v3.2.9/kklib/src/all.c:26:
+/opt/koka/share/koka/v3.2.9/kklib/include/kklib.h:17:9: warning: '_POSIX_C_SOURCE' redefined
+   17 | #define _POSIX_C_SOURCE     200809L  // make posix definitions visible
+      |         ^~~~~~~~~~~~~~~
+In file included from /usr/include/assert.h:35,
+                 from /opt/koka/share/koka/v3.2.9/kklib/mimalloc/include/mimalloc.h:100,
+                 from /opt/koka/share/koka/v3.2.9/kklib/src/../mimalloc/src/static.c:16,
+                 from /opt/koka/share/koka/v3.2.9/kklib/src/all.c:23:
+/usr/include/features.h:319:10: note: this is the location of the previous definition
+  319 | # define _POSIX_C_SOURCE        202405L
+      |          ^~~~~~~~~~~~~~~
+chmod +x qrkoka
+./qrkoka > QR.chpl
+
+###########################
+##  235: Chapel -> Pony  ##
+###########################
+
+chpl -o qrchpl QR.chpl
+./qrchpl > QR.pony
+
+#########################
+##  236: Pony -> Odin  ##
+#########################
+
+mkdir -p qrpony
+cp QR.pony qrpony/main.pony
+ponyc -V0 -b qrpony.out -o . qrpony
+./qrpony.out > QR.odin
+
+#################################
+##  237: Odin -> rep (librep)  ##
+#################################
+
+odin run QR.odin -file > QR.rep
+
+##########################################
+##  238: rep (librep) -> Gambit Scheme  ##
+##########################################
+
+rep QR.rep > QR.gambit.scm
+
+############################################
+##  239: Gambit Scheme -> Chicken Scheme  ##
+############################################
+
+gsi QR.gambit.scm > QR.chicken.scm
+
+##########################################
+##  240: Chicken Scheme -> Chez Scheme  ##
+##########################################
+
+csi -q -s QR.chicken.scm > QR.chez.ss
+
+####################################
+##  241: Chez Scheme -> Parser 3  ##
+####################################
+
+chezscheme --script QR.chez.ss > QR.p
+
+###############################
+##  242: Parser 3 -> Pascal  ##
+###############################
+
+parser3 QR.p > QR.pas
+
+#############################
+##  243: Pascal -> Perl 5  ##
+#############################
+
+fpc QR.pas
+Free Pascal Compiler version 3.2.2+dfsg-49 [2026/02/27] for x86_64
+Copyright (c) 1993-2021 by Florian Klaempfl and others
+Target OS: Linux for x86-64
+Compiling QR.pas
+Linking QR
+1 lines compiled, 0.0 sec
+./QR > QR.pl
+
+#############################
+##  244: Perl 5 -> Perl 6  ##
+#############################
+
+perl QR.pl > QR.pl6
+
+##############################
+##  245: Perl 6 -> Mercury  ##
+##############################
+
+perl6 QR.pl6 > qr_mercury.m
+
+#############################
+##  246: Mercury -> Maude  ##
+#############################
+
+mmc --make qr_mercury > /dev/null
+Making Mercury/int3s/qr_mercury.int3
+Making Mercury/ints/qr_mercury.int
+Making Mercury/cs/qr_mercury.c
+Making Mercury/os/qr_mercury.o
+Making qr_mercury
+./qr_mercury > QR.maude
+
+##########################
+##  247: Maude -> Pike  ##
+##########################
+
+maude -no-banner -no-advise -allow-files file QR.maude < /dev/null > /dev/null
+cat QR_maude.out > QR.pike
+
+############################
+##  248: Pike -> Logtalk  ##
+############################
+
+pike QR.pike > QR.lgt
+
+##################################
+##  249: Logtalk -> PostScript  ##
+##################################
+
+swilgt -q -g "logtalk_load('QR.lgt'),halt" < /dev/null > QR.ps
+
+###############################
+##  250: PostScript -> Agda  ##
+###############################
+
+gs -dNODISPLAY -q QR.ps > QR.agda
+
+###########################
+##  251: Agda -> Prolog  ##
+###########################
+
+agda --compile --compile-dir=agda_out QR.agda > /dev/null
+./agda_out/QR > QR.prolog
+
+###########################
+##  252: Prolog -> ACL2  ##
+###########################
+
+swipl -q -t qr -f QR.prolog > QR.acl2
+
+###################################
+##  253: ACL2 -> Promela (Spin)  ##
+###################################
+
+acl2 < QR.acl2 > /dev/null
+cat QR_acl2.out > QR.pr
+
+###################################
+##  254: Promela (Spin) -> Rail  ##
+###################################
+
+spin -T QR.pr > QR.rail
+
+###########################
+##  255: Rail -> Kipple  ##
+###########################
+
+ruby vendor/rail.rb QR.rail > QR.kpl
+
+##############################
+##  256: Kipple -> Beatnik  ##
+##############################
+
+ruby vendor/kipple.rb QR.kpl > QR.beatnik
+
+#############################
+##  257: Beatnik -> Glass  ##
+#############################
+
+ruby vendor/beatnik.rb QR.beatnik > QR.glass
+
+##########################
+##  258: Glass -> Taxi  ##
+##########################
+
+ruby vendor/glass.rb QR.glass > QR.taxi
+
+##############################
+##  259: Taxi -> Deadfish~  ##
+##############################
+
+taxi QR.taxi > QR.dft
+
+##############################
+##  260: Deadfish~ -> Lout  ##
+##############################
+
+ruby vendor/deadfish_tilde.rb QR.dft > QR.lout
+
+##############################
+##  261: Lout -> Plain TeX  ##
+##############################
+
+lout -s -p6p12p QR.lout 2>/dev/null | tr -d '\014' | grep . > QR.tex
+
+##################################
+##  262: Plain TeX -> MetaPost  ##
+##################################
+
+rm -f QR.out QR.log
+tex -interaction=batchmode QR.tex >/dev/null
+cat QR.out > QR.mp
+rm -f QR.out QR.log
+
+#################################
+##  263: MetaPost -> Inform 6  ##
+#################################
+
+rm -f QR.out QR.log
+mpost -interaction=batchmode QR.mp >/dev/null
+cat QR.out > QR.inf
+rm -f QR.out QR.log
+
+############################
+##  264: Inform 6 -> Ink  ##
+############################
+
+rm -f QR.z8
+inform6 -v8 QR.inf QR.z8 >/dev/null
+dfrotz -m -q -r cm -w 240 -h 200 QR.z8 | tail -n +2 > QR.ink
+rm -f QR.z8
+
+##########################
+##  265: Ink -> TADS 3  ##
+##########################
+
+inklecate -p QR.ink > QR.t3.t
+
+#############################
+##  266: TADS 3 -> Uxntal  ##
+#############################
+
+rm -f QR.out QR.t3
+t3make -q -a -FI /usr/share/frobtads/tads3/include -FI /usr/local/share/frobtads/tads3/include -FL /usr/share/frobtads/tads3/lib -FL /usr/local/share/frobtads/tads3/lib -o QR.t3 system.tl QR.t3.t
+frob -i plain -p -s0 QR.t3 >/dev/null
+cat QR.out > QR.tal
+rm -f QR.out QR.t3
+
+###########################
+##  267: Uxntal -> MMIX  ##
+###########################
+
+uxnasm QR.tal QR.rom
+Assembled QR.rom in 57.59kb(90.73% used), 6 labels, 0 macros.
+uxncli QR.rom > QR.mms
+Loaded QR.rom
+rm -f QR.rom
+
+#############################
+##  268: MMIX -> 6502 asm  ##
+#############################
+
+mmixal -b 2000000 -o QR.mmo QR.mms
+mmix QR.mmo > QR.s65
+rm -f QR.mmo
+
+##################################
+##  269: 6502 asm -> ARM64 asm  ##
+##################################
+
+xa -o QR.o65 QR.s65
+python3 vendor/run6502.py QR.o65 > QR.arm64.s
+
+#################################
+##  270: ARM64 asm -> Z80 asm  ##
+#################################
+
+rm -f QR
+aarch64-linux-gnu-gcc -nostdlib -static -o QR QR.arm64.s
+qemu-aarch64 ./QR > QR.z80
+rm -f QR
+
+##################################
+##  271: Z80 asm -> RISC-V asm  ##
+##################################
+
+z80asm QR.z80 -o QR.z80.bin
+python3 vendor/runz80.py QR.z80.bin > QR.rv.s
+
+####################################
+##  272: RISC-V asm -> BeanShell  ##
+####################################
+
+rm -f QR
+riscv64-linux-gnu-gcc -nostdlib -static -o QR QR.rv.s
+qemu-riscv64 ./QR > QR.bsh
+rm -f QR
+
+#################################
+##  273: BeanShell -> Befunge  ##
+#################################
+
+bsh QR.bsh > QR.bef
+stty: standard input: Inappropriate ioctl for device
+make: [Makefile:2360: QR.bef] Error 1 (ignored)
+
+############################
+##  274: Befunge -> BLC8  ##
+############################
+
+cfunge QR.bef > QR.Blc
+
+##############################
+##  275: BLC8 -> Brainfuck  ##
+##############################
+
+ruby vendor/blc.rb < QR.Blc > QR.bf
+
+#############################
+##  276: Brainfuck -> ksh  ##
+#############################
+
+ruby vendor/bf.rb QR.bf > QR.ksh
+
+##########################
+##  277: ksh -> Lazy K  ##
+##########################
+
+ksh QR.ksh > QR.lazy
+
+#################################
+##  278: Lazy K -> LiveScript  ##
+#################################
+
+lazyk QR.lazy > QR.ls
+
+#################################
+##  279: LiveScript -> Python  ##
+#################################
+
+lsc QR.ls > QR.py
+
+########################
+##  280: Python -> R  ##
+########################
+
+python3 QR.py > QR.R
+
+########################
+##  281: R -> Ratfor  ##
+########################
+
+R --slave -f QR.R > QR.ratfor
+
+#########################
+##  282: Ratfor -> rc  ##
+#########################
+
+ratfor -o QR.ratfor.f QR.ratfor
+gfortran -o QR QR.ratfor.f
+./QR > QR.rc
+
+#######################
+##  283: rc -> REXX  ##
+#######################
+
+rc QR.rc > QR.rexx
+
+#########################
+##  284: REXX -> Ruby  ##
+#########################
+
+rexx ./QR.rexx > QR2.rb
+
+#############
+##  CHECK  ##
+#############
+
+diff -s QR.rb QR2.rb
+Files QR.rb and QR2.rb are identical

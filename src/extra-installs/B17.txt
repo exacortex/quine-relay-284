@@ -1,0 +1,27 @@
+# B17 Dockerfile.ext snippet - apt packages + pinned Lout (william8000/lout), frobtads (v2.0), inklecate (v1.2.1)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    texlive-base texlive-binaries texlive-metapost inform6-compiler inform6-library frotz \
+    gcc g++ libc6-dev make cmake libncurses-dev libcurl4-openssl-dev unzip ca-certificates git curl \
+    && git clone --depth 1 https://gitlab.com/DavidGriffith/frotz.git /tmp/frotz \
+    && make -C /tmp/frotz dumb \
+    && install -m 755 /tmp/frotz/dfrotz /usr/local/bin/dfrotz \
+    && rm -rf /tmp/frotz \
+    && git clone --depth 1 https://github.com/william8000/lout.git /tmp/lout \
+    && mkdir -p /usr/local/bin /usr/local/lib/lout /usr/local/share/doc/lout /usr/local/share/man/man1 \
+    && make -C /tmp/lout CC="gcc -std=gnu17 -O2 -Wno-implicit-function-declaration -Wno-return-type" PREFIX=/usr/local BINDIR=/usr/local/bin LOUTLIBDIR=/usr/local/lib/lout LOUTDOCDIR=/usr/local/share/doc/lout MANDIR=/usr/local/share/man/man1 all install \
+    && (/usr/local/bin/lout -x -s /usr/local/lib/lout/include/init || true) \
+    && rm -rf /tmp/lout \
+    && (apt-get install -y --no-install-recommends frobtads || ( \
+        git clone --recurse-submodules --branch v2.0 --depth 1 https://github.com/realnc/frobtads.git /tmp/frobtads \
+        && cmake -S /tmp/frobtads -B /tmp/frobtads/build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local \
+        && cmake --build /tmp/frobtads/build -j$(nproc) \
+        && cmake --install /tmp/frobtads/build \
+        && rm -rf /tmp/frobtads \
+    )) \
+    && (curl --retry 5 -fsSL https://github.com/inkle/ink/releases/download/v1.2.1/inklecate_linux.zip -o /tmp/inklecate.zip \
+        || curl --retry 5 -fsSL https://github.com/inkle/ink/releases/latest/download/inklecate_linux.zip -o /tmp/inklecate.zip) \
+    && mkdir -p /opt/inklecate \
+    && unzip -q /tmp/inklecate.zip -d /opt/inklecate \
+    && chmod +x /opt/inklecate/inklecate \
+    && ln -sf /opt/inklecate/inklecate /usr/local/bin/inklecate \
+    && rm -f /tmp/inklecate.zip

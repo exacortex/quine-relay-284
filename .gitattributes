@@ -1,0 +1,13 @@
+* text=auto eol=lf
+/QR.rb -text linguist-generated linguist-language=prose
+/Dockerfile linguist-generated
+/Makefile linguist-generated
+/README.md linguist-generated
+/LANGUAGES.md linguist-generated
+/SHA256SUMS linguist-generated
+/langs.png binary linguist-generated
+/thumbnail.png binary linguist-generated
+/vendor linguist-vendored
+/proof/build.log linguist-generated
+/proof/run.log linguist-generated
+/proof/zones.csv linguist-generated

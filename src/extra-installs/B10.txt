@@ -1,0 +1,12 @@
+# B10: logic & rules. CLIPS and Maude come from apt (Apt in batch.rb); these don't. All pinned.
+# Dart 3.14.0: official SDK zip (free-pool swap for Souffle).
+RUN cd /opt && curl -fsSL -o dart.zip https://storage.googleapis.com/dart-archive/channels/stable/release/3.14.0/sdk/dartsdk-linux-x64-release.zip && unzip -q dart.zip && rm dart.zip && ln -s /opt/dart-sdk/bin/dart /usr/local/bin/dart && dart --version
+# Picat 3.9#12: official Linux binary.
+RUN cd /opt && curl -fsSL https://picat-lang.org/download/picat39_12_linux64.tar.gz | tar -xz && ln -s /opt/Picat/picat /usr/local/bin/picat && picat --version
+# Mercury 22.01.8: the project's Debian repo (trixie build). Its signing key (Paul Bone, DABC17308F5152E3) has
+# expired upstream, so the repo is marked trusted and the package is pinned to the exact version instead.
+RUN echo "deb [trusted=yes] https://dl.mercurylang.org/deb/ trixie main" > /etc/apt/sources.list.d/mercury.list && apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq mercury-recommended=22.01.8-1~trixie > /dev/null && rm /etc/apt/sources.list.d/mercury.list && apt-get clean && mmc --version | head -1
+# Logtalk 3.102.0 (spare, for clingo): official .deb, runs on the relay's SWI-Prolog. The user dir is made once here
+# so the first run doesn't print setup text.
+ENV LOGTALKHOME=/usr/share/logtalk LOGTALKUSER=/root/logtalk
+RUN curl -fsSL -o /tmp/lgt.deb https://logtalk.org/files/logtalk_3.102.0-1_all.deb && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq /tmp/lgt.deb > /dev/null && rm /tmp/lgt.deb && logtalk_user_setup > /dev/null && swilgt -q -g halt < /dev/null

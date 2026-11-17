@@ -1,0 +1,20 @@
+# B16 Dockerfile.ext snippet - pinned Factor 0.100, Joy (Wodan58/Joy), LFE 2.1.4, ArnoldC, Pyth
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    erlang-nox erlang-dev default-jdk-headless python3 gcc libc6-dev libgc-dev make git curl ca-certificates \
+    && curl --retry 5 --retry-all-errors -fsSL https://downloads.factorcode.org/releases/0.100/factor-linux-x86-64-0.100.tar.gz -o /tmp/factor.tar.gz \
+    && tar -xzf /tmp/factor.tar.gz -C /opt \
+    && ln -sf /opt/factor/factor /usr/local/bin/factor-vm \
+    && rm -f /tmp/factor.tar.gz \
+    && git clone --depth 1 https://github.com/Wodan58/joy0.git /tmp/joy \
+    && cd /tmp/joy \
+    && ([ -f globals.h ] && sed -i 's/INPLINEMAX.*/INPLINEMAX 65535/; s/MEMORYMAX.*/MEMORYMAX 2000000/' globals.h || true) \
+    && ([ -f main.c ] && sed -i '/JOY  -  compiled/d; /totaltime = clock/i exit(EXIT_SUCCESS);' main.c || true) \
+    && gcc -O2 -std=gnu89 -fcommon -Wno-implicit-int -Wno-implicit-function-declaration -Wno-return-type -Wno-int-conversion *.c -lm -o /usr/local/bin/joy \
+    && cd / && rm -rf /tmp/joy \
+    && git clone --branch 2.1.4 --depth 1 https://github.com/lfe/lfe.git /opt/lfe \
+    && make -C /opt/lfe compile \
+    && ln -sf /opt/lfe/bin/lfe /usr/local/bin/lfe \
+    && ln -sf /opt/lfe/bin/lfec /usr/local/bin/lfec \
+    && ln -sf /opt/lfe/bin/lfescript /usr/local/bin/lfescript \
+    && curl --retry 5 --retry-all-errors -fsSL https://lhartikk.github.io/ArnoldC.jar -o /opt/ArnoldC.jar \
+    && git clone --depth 1 https://github.com/isaacg1/pyth.git /opt/pyth

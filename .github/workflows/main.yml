@@ -1,0 +1,319 @@
+name: CI
+# A full 284-step build + lap takes ~90 minutes and ~35 GB of disk, so CI only runs
+# when started by hand (Actions tab > CI > Run workflow).
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: docker build
+        run: |
+          sudo docker build -t quine-relay .
+      - name: docker run
+        run: |
+          sudo docker run --privileged --name qr -e CI=true -t quine-relay
+      - name: push spoiler
+        run: |
+          git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git spoiler --branch spoiler || \
+            (git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git spoiler && git -C spoiler checkout --orphan spoiler)
+          git -C spoiler rm --quiet -r --ignore-unmatch '*'
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rb spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sno spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sim spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.obn spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ex spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.alg spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.b spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.k.k spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bas spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ck spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.dash spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.roff spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.hy spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.jsonnet spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.nl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.nqp spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.l spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rkt spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sql spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.cc spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pasm spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.xsh spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mksh spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bbash spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.art spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.yash spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.yue spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.elv spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR_rocq.v spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.lean spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.idr spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.vlang.v spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ha spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.c3 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.nelua spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.zig spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ps1 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.nu spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ion spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ysh spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mx spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.hsh spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.es spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.boo spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.vhdl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.genie.gs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.nix spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.xq spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pkl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.koto spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.cue spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.m2 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.dart spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ank spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.tengo spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ncl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rhai spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.scala spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.scm spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sci spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sed spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.spl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.nut spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sml spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sq spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ss spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.swift spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.tcl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.tcsh spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.t spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ts spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.unl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.v spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fish.fish spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.hxg spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.vim spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.vb spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.wasm spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.wat spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ws spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.xslt spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.slashes spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.cjam spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ul spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bflk spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.yab spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.yorick spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sing spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.input spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.azm spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ndf spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.zsh spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ua spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bqn spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fan spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.golo spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bal spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.yeti spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gsp spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fr spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/qr.adb spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.als spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.aheui spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ijs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.a68 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ante spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.star spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.aj spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.tl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.asy spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.um spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fst spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.dats spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.moon spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.awk spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rego spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.wl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bash spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bc spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.be spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.c spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.cpp spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pyth spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.emmental spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.arnoldc spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.lfe spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.joy spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.factor spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.nbt spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.cs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.chef spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.frink spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.clj spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.cmake spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.cob spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ring spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.coffee spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.lisp spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.cr spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.d spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.dc spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.dhall spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.exs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.el spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.erl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.e spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fsx spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.false spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fnl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fish spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.f spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.f90 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gbs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.g spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gdb spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gel spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.plt spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.go spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gpt spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.grass spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.janet spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.groovy spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gz spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.io spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.hs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pi spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.hx spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.clp spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.icn spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.i spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.wren spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.j spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.purs spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.elm spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.arr spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.res spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.wisp spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.imba spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.dfy spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.jl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mac spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gri spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.logo spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.java spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.st spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.js spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.jq spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.jsfuck spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.kt spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.txrlisp spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gravity spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.kg spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gsl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.sd7 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.curry spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.nc spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ll spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.red spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.lol spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.lua spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/qr.li spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR_ec.ec spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.cd spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.aplus.a spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.m4 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mk spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mzn spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mod spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.il spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.php spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.png spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mustache spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.asm spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.neko spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.5c spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.nim spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.m spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ml spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.fal spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.vala spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mid spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.coco spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.octave spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ook spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gp spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gleam spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.roc spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.inko spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/qr.kk spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.chpl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pony spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.odin spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rep spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.gambit.scm spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.chicken.scm spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.chez.ss spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.p spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pas spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pl6 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/qr_mercury.m spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.maude spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pike spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.lgt spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ps spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.agda spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.prolog spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.acl2 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.pr spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rail spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.kpl spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.beatnik spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.glass spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.taxi spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.dft spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.lout spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.tex spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mp spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.inf spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ink spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.t3.t spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.tal spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.mms spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.s65 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.arm64.s spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.z80 spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rv.s spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bsh spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bef spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.Blc spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.bf spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ksh spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.lazy spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ls spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.py spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.R spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.ratfor spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rc spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rexx spoiler/
+          cd spoiler
+          git add .
+          GIT_AUTHOR_NAME="$(git show -s --format=%an "$GITHUB_SHA")" \
+          GIT_AUTHOR_EMAIL="$(git show -s --format=%ae "$GITHUB_SHA")" \
+          GIT_AUTHOR_DATE="$(git show -s --format=%ad "$GITHUB_SHA")" \
+          GIT_COMMITTER_NAME='GitHub Actions' \
+          GIT_COMMITTER_EMAIL='actions@github.com' \
+          TZ=UTC \
+          git commit --allow-empty -m "spoiler: $(git show -s --format=%s "$GITHUB_SHA")"
+          git push --quiet origin spoiler
+          echo The intermediate sources are available: https://github.com/${GITHUB_REPOSITORY}/tree/spoiler
+        if: github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
