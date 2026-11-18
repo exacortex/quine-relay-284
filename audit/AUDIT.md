@@ -52,7 +52,14 @@ The Rail program now starts with `$ 'main'`, the entry point the real interprete
 
 `glass-0.12` needs `-std=gnu++98 -include cstring -include cstdlib -include cstdio -fpermissive` to build with a modern g++. We changed no source.
 
-**Not compared against a third-party implementation:** the 6502 and Z80 runners (`vendor/run6502.py`, `vendor/runz80.py`). Both are self-made. Their input is assembled by the real `xa65` and `z80asm`, but the CPU emulation is the repo's own.
+**Addendum (same day, post-PR #1):** Both CPU runners (`vendor/run6502.py`, `vendor/runz80.py`) have now also been verified byte-for-byte against independent third-party emulators (`audit/scripts/verify_6502_z80.py`):
+
+| Step | Third-party emulator | Assembled ROM | Output | Result | sha256 of output |
+|---|---|---|---|---|---|
+| 268 `6502 asm` (`xa65`) | Mike Naberezny's `py65` `1.2.0` (`py65.devices.mpu6502.MPU`) | 45,083 B (`QR.o65`) | 149,485 B (`QR.arm64.s`) | **match** | `08a99a49…fafd3e05` |
+| 270 `Z80 asm` (`z80asm`) | `z80` `1.2.0` C-extension core (`z80.Z80Machine`) | 32,039 B (`QR.z80.bin`) | 339,973 B (`QR.rv.s`) | **match** | `5101f5c8…5e42647e` |
+
+The stale/loose labels noted in [MATH-CHECK.md](MATH-CHECK.md) were also updated in `RECORDS.md`, `RELAY-284.md`, and `README.md`.
 
 ## 5. Small notes (not problems)
 

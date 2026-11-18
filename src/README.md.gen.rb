@@ -206,7 +206,13 @@ The complete standalone `docker build` log, `docker run` log, and payload profil
 
 <%= new_steps.map {|s| s.name }.join(", ") %>.
 
-See [RELAY-284.md](RELAY-284.md) for how 284 steps fit into a ~41 KB Ruby quine without blowing through compiler, VM, and memory ceilings (zero-backslash Forth `126 PARSE`, 3-byte base-84 LZ78 in Kotlin, self-reading comment decoders for Shakespeare and historical languages, and interleaved Re-Pair assembly compression).
+See [VICTORY-LAP.md](VICTORY-LAP.md) and [RELAY-284.md](RELAY-284.md) for how 284 steps fit into a 42,680-byte Ruby quine without blowing through compiler, VM, and memory ceilings (zero-backslash Forth `126 PARSE`, 3-digit base-78 LZ78 in Kotlin, self-reading comment decoders for Shakespeare and historical languages, and interleaved Re-Pair assembly compression).
+
+## Papers, Formal Proofs & Independent Audit
+
+- **[uroboros_284_paper.pdf](paper/uroboros_284_paper.pdf)** ([LaTeX](paper/uroboros_284_paper.tex)) & **[payload-growth.md](paper/payload-growth.md)** — Scientific paper and technical note on affine escape dynamics, eigen-doubling ($\Phi = S + Q + 2$), loop telescoping ($\prod r_k = 1$), and compiler ceiling bounds.
+- **[proof/formal/](proof/formal/)** — Constructive formal proofs of all 7 mathematical theorem suites, machine-checked with **Lean 4.35.0** and **Rocq 8.20.1 + `coqchk`** (`0 sorry`, `0 Admitted`, `0 axioms`).
+- **[audit/AUDIT.md](audit/AUDIT.md)** & **[tools/verify_invariants.py](tools/verify_invariants.py)** — Independent audit of generated sources, build/run logs, upstream esolang interpreters (`Hexagony`, `Emmental`, `Rail`, `Kipple`, `Glass`), and third-party `6502`/`Z80` CPU emulators (`py65`, `z80`).
 
 ## Records
 

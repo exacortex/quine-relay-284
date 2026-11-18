@@ -35,7 +35,13 @@ The complete standalone `docker build` log, `docker run` log, and payload profil
 
 SNOBOL4, Simula, Oberon, Euphoria, ALGOL 60, BCPL, K (ngn/k), BASIC (bwBASIC), ChucK, dash, groff, Hy, Jsonnet, newLISP, NQP, PicoLisp, Racket, SQL (SQLite), AspectC++, Parrot asm (PASM), xonsh, mksh, BusyBox ash, Arturo, yash, YueScript, Elvish, Rocq, Lean 4, Idris 2, V, Hare, C3, Nelua, Zig, PowerShell, Nushell, Ion, YSH, Murex, Hush, es, Boo, VHDL, Genie, Nix, XQuery, Pkl, Koto, CUE, Macaulay2, Dart, Anko, Tengo, Nickel, Rhai, ><> (Fish), Hexagony, ///, CJam, Underload, Brain-Flak, Singular, FriCAS, Nial, Uiua, BQN, Fantom, Golo, Ballerina, Yeti, Gosu, Frege, J, Starlark, Teal, Umka, F*, MoonScript, Rego, Mathics, Berry, Pyth, Emmental, ArnoldC, LFE, Joy, Factor, Numbat, Frink, Ring, Janet, Io, Picat, CLIPS, Wren, PureScript, Elm, Pyret, ReScript, Wisp, Imba, Dafny, Julia, Maxima, Gri, UCBLogo, GNU Smalltalk, TXR, Gravity, Klong, GSL (Generator Scripting Language), Seed7, Curry, nesC, REDUCE, Lisaac, eC, CDuce, A+, Falcon, Coconut, Gleam, Roc, Inko, Koka, Chapel, Pony, Odin, rep (librep), Chicken Scheme, Rockstar, Chez Scheme, Mercury, Maude, Logtalk, Agda, ACL2, Rail, Kipple, Beatnik, Glass, Taxi, Deadfish~, Lout, Plain TeX, MetaPost, Inform 6, Ink, TADS 3, Uxntal, MMIX, 6502 asm, ARM64 asm, Z80 asm, RISC-V asm.
 
-See [RELAY-284.md](RELAY-284.md) for how 284 steps fit into a ~41 KB Ruby quine without blowing through compiler, VM, and memory ceilings (zero-backslash Forth `126 PARSE`, 3-byte base-84 LZ78 in Kotlin, self-reading comment decoders for Shakespeare and historical languages, and interleaved Re-Pair assembly compression).
+See [VICTORY-LAP.md](VICTORY-LAP.md) and [RELAY-284.md](RELAY-284.md) for how 284 steps fit into a 42,680-byte Ruby quine without blowing through compiler, VM, and memory ceilings (zero-backslash Forth `126 PARSE`, 3-digit base-78 LZ78 in Kotlin, self-reading comment decoders for Shakespeare and historical languages, and interleaved Re-Pair assembly compression).
+
+## Papers, Formal Proofs & Independent Audit
+
+- **[uroboros_284_paper.pdf](paper/uroboros_284_paper.pdf)** ([LaTeX](paper/uroboros_284_paper.tex)) & **[payload-growth.md](paper/payload-growth.md)** — Scientific paper and technical note on affine escape dynamics, eigen-doubling ($\Phi = S + Q + 2$), loop telescoping ($\prod r_k = 1$), and compiler ceiling bounds.
+- **[proof/formal/](proof/formal/)** — Constructive formal proofs of all 7 mathematical theorem suites, machine-checked with **Lean 4.35.0** and **Rocq 8.20.1 + `coqchk`** (`0 sorry`, `0 Admitted`, `0 axioms`).
+- **[audit/AUDIT.md](audit/AUDIT.md)** & **[tools/verify_invariants.py](tools/verify_invariants.py)** — Independent audit of generated sources, build/run logs, upstream esolang interpreters (`Hexagony`, `Emmental`, `Rail`, `Kipple`, `Glass`), and third-party `6502`/`Z80` CPU emulators (`py65`, `z80`).
 
 ## Records
 

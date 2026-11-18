@@ -28,14 +28,14 @@ Each language counts once. A language counts only if it has its own name and its
 
 ## Tier 2: relay steps
 
-Steps are counted the way mame counts them, plus a limited number of extra implementations. Every step must:
+Steps are counted the way mame counts them, plus a limited number of extra implementations. mame's 128 historical steps are grandfathered as-is; every step added beyond them must:
 
 1. Run on its **own interpreter or compiler**: a different program, not the same one with a different flag.
 2. Have **its own source text**. Two steps can't run the same program.
 3. Be **verified for real** (see below).
 4. Stay within the **family cap**: at most 3 steps per language, counting the first one.
 
-Not allowed: version-only copies (Python 3.12 and 3.13), the same binary twice, and steps that only pass the text along (`cat`, `base64`, a plain `echo`).
+Not allowed for new steps: version-only copies (Python 3.12 and 3.13), the same binary twice, and steps that only pass the text along (`cat`, `base64`, a plain `echo`).
 
 ## How to claim a record
 
@@ -56,5 +56,5 @@ Anyone should be able to repeat the run with `docker build` and `docker run`. If
 | Distinct languages (Tier 1) | 123 | 143 | **273** |
 | Relay steps (Tier 2) | 128 | 151 | **284** |
 | Smallest seed per step | 106.8 B (13,664 ÷ 128) | **98.5 B** (14,868 ÷ 151) | 150.3 B (42,680 ÷ 284) |
-| Typical corridor payload | ~1.5 MB | ~3 MB | **~8.6–9.9 MB** (94.7 MB single-step Taxi/Glass) |
+| Typical main corridor payload | ~1.15 MB front (`27.9 KB` median, `4.69 MB` `Ook!`) | ~3 MB (`~4.7 MB` `Ook!`) | **~7.3–9.4 MB** (`94.5 MB` `Glass`/`Taxi`, `1.14 GB` group sum) |
 | Retired mame languages restored | — | 2 | **17 of 20** |

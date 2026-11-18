@@ -1,0 +1,8 @@
+=== Lean 4 Kernel Verification ===
+Lean (version 4.35.0, x86_64-unknown-linux-gnu, commit eb6cafb7290e8bd5f2937522d8d804f58f02bafc, Release)
+LEAN 4: ALL 7 THEOREM SUITES VERIFIED (0 sorry, 0 warnings)
+
+=== Rocq / Coq Kernel & Independent Checker (coqchk) ===
+The Coq Proof Assistant, version 8.20.1
+compiled with OCaml 5.4.0
+ROCQ 8.20.1 + COQCHK: ALL 7 THEOREM SUITES VERIFIED (0 Admitted, 0 axioms)
