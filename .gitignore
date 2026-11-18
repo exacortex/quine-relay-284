@@ -16,3 +16,5 @@ tmp.*proj
 # dotnet leaves these behind
 /bin/
 /obj/
+
+.*.cache
