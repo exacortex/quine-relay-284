@@ -1,12 +1,36 @@
 #!/usr/bin/env ruby
-# Glass interpreter for Quine Relay B20.
+# Glass interpreter for Quine Relay B20 (matches Gregor Richards' glass-0.12 C++ spec).
 # Spec: https://esolangs.org/wiki/Glass
 src = File.binread(ARGV[0])
-m_start = src.index("[m")
-m_end = src.rindex("]")
-body = m_start && m_end ? src.byteslice(m_start + 2, m_end - m_start - 2) : src
+# Strip 'comments' outside "strings" (matching parseI in glass.cc)
+clean = +""
+i = 0
+sn = src.bytesize
+while i < sn
+  ch = src.getbyte(i)
+  if ch == 34 # '"'
+    clean << '"'
+    i += 1
+    while i < sn && src.getbyte(i) != 34
+      clean << src.getbyte(i).chr
+      i += 1
+    end
+    clean << '"' if i < sn
+    i += 1
+  elsif ch == 39 # "'"
+    i += 1
+    i += 1 while i < sn && src.getbyte(i) != 39
+    i += 1
+  else
+    clean << ch.chr
+    i += 1
+  end
+end
 
-# Tokenize body into instructions for fast execution
+m_start = clean.index("[m")
+m_end = clean.rindex("]")
+body = m_start && m_end ? clean.byteslice(m_start + 2, m_end - m_start - 2) : clean
+
 tokens = []
 i = 0
 n = body.bytesize
@@ -14,25 +38,34 @@ while i < n
   c = body[i]
   case c
   when '"'
-    i += 1
+    fin = body.index('"', i + 1)
+    raw = body.byteslice(i + 1, fin - i - 1)
+    # Match stringParse in glass.cc
     s = +""
-    while i < n && body[i] != '"'
-      if body[i] == "\\" && i + 1 < n
-        i += 1
-        esc = body[i]
+    j = 0
+    rn = raw.bytesize
+    while j < rn
+      if raw.getbyte(j) == 92 && j + 1 < rn
+        esc = raw[j + 1]
         s << (esc == "n" ? "\n" : esc)
+        j += 2
       else
-        s << body[i]
+        s << raw[j]
+        j += 1
       end
-      i += 1
     end
     tokens << [:str, s]
-    i += 1
+    i = fin + 1
+  when "<"
+    fin = body.index(">", i + 1)
+    val = body.byteslice(i + 1, fin - i - 1)
+    tokens << [:num, val.to_i]
+    i = fin + 1
   when "("
     fin = body.index(")", i + 1)
     val = body.byteslice(i + 1, fin - i - 1)
-    if val =~ /\A-?[0-9]+\z/
-      tokens << [:num, val.to_i]
+    if val =~ /\A[0-9]+\z/
+      tokens << [:stack_copy, val.to_i]
     else
       tokens << [:sym, val]
     end
@@ -51,8 +84,11 @@ while i < n
   when "\\"
     tokens << [:loop_end, nil, 0]
     i += 1
-  when "!", ".", "?", "$", "*", ",", "^"
+  when "!", ".", "?", "=", "*", ",", "^", "$"
     tokens << [c]
+    i += 1
+  when "0".."9"
+    tokens << [:stack_copy, c.to_i]
     i += 1
   when "A".."Z", "a".."z"
     tokens << [:sym, c]
@@ -84,17 +120,23 @@ while pc < tn
   case t[0]
   when :str, :num, :sym
     stack.push(t[1])
-  when "$"
+  when :stack_copy
+    idx = t[1]
+    stack.push(idx < stack.size ? stack[stack.size - 1 - idx] : nil)
+  when "="
     val = stack.pop
     var = stack.pop
     vars[var] = val
+  when "$"
+    var = stack.pop
+    vars[var] = "M"
   when "*"
     var = stack.pop
     stack.push(vars[var])
   when ","
     stack.pop
   when "^"
-    stack.push(stack.last)
+    break
   when "!"
     cls = stack.pop
     var = stack.pop
@@ -112,16 +154,21 @@ while pc < tn
         out << stack.pop.to_i.to_s
       end
     elsif cls == "S"
-      if meth == "l"
+      case meth
+      when "l"
         stack.push(stack.pop.to_s.bytesize)
-      elsif meth == "i"
+      when "i"
         idx = stack.pop.to_i
         str = stack.pop.to_s
         stack.push(str.byteslice(idx, 1) || "")
-      elsif meth == "ns"
-        stack.push(stack.pop.to_s.getbyte(0) || 0)
-      elsif meth == "sn"
+      when "a"
+        b = stack.pop.to_s
+        a = stack.pop.to_s
+        stack.push(a + b)
+      when "ns" # Number to String/Char (builtins.cc:160)
         stack.push((stack.pop.to_i & 0xFF).chr)
+      when "sn" # String/Char to Number (builtins.cc:163)
+        stack.push(stack.pop.to_s.getbyte(0) || 0)
       end
     elsif cls == "A"
       b = stack.pop.to_i

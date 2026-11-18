@@ -1,14 +1,14 @@
 # Quine Relay 284
 
-**A 284-step quine relay across 272 distinct programming languages, verified end to end on Ubuntu 26.04.**
-It extends [Yusuke Endoh's Quine Relay](https://github.com/mame/quine-relay) (128 steps / 123 distinct languages) with 156 more steps (+149 distinct languages) — more than doubling the previous world record.
+**A 284-step quine relay across 273 distinct programming languages, verified end to end from a clean Ubuntu 26.04 Docker build.**
+It extends [Yusuke Endoh's Quine Relay](https://github.com/mame/quine-relay) (128 steps / 123 distinct languages) with 156 more steps (+150 net new distinct languages) — more than doubling the previous world record under both counting rules.
 
 ## What this is
 
 [QR.rb](QR.rb) is a Ruby program that generates
 a SNOBOL4 program that generates
 a Simula program that generates
-...(through 284 steps / 272 distinct languages in total)...
+...(through 284 steps / 273 distinct languages in total)...
 a REXX program that generates
 the original Ruby code again.
 
@@ -20,30 +20,29 @@ The languages in red are the 156 steps added in this fork. Everything in black i
 
 ## Proof that it works
 
-On November 17, 2026, the full 284-step relay ran in Docker on Ubuntu 26.04:
+In November 2026, the full 284-step relay built from scratch (`FROM ubuntu:26.04`) using this repository's [`Dockerfile`](Dockerfile) and ran end to end:
 
 - **All 284 steps ran consecutively on their real interpreters and compilers.** Zero stand-ins, zero skipped steps.
-- Step 284 (REXX) printed `QR2.rb`, byte-for-byte identical to the 40,660-byte `QR.rb`.
+- Step 284 (REXX) printed `QR2.rb`, byte-for-byte identical to `QR.rb` (42680 bytes).
 - `make check` passed. SHA-256 of both files:
-  `f6c73b482c42d99c696a527d300d0b52f8789e56dd504341dc8a6ea36f8c228a`
-- The full verification lap finished in **2,279 seconds (37 minutes 59 seconds)**.
+  `9ce6dbe31564079cb8e7bec5830e06a02b8cb7c651b7a48e0f6970aaeceb509a`
 
-The complete logs and payload profile are in [`proof/`](proof/). You can repeat the entire build and run with the two Docker commands below.
+The complete standalone `docker build` log, `docker run` log, and payload profile are in [`proof/`](proof/). Anyone can repeat the exact build and run with the two Docker commands below.
 
 ## What's new in this fork
 
-**156 new steps** (149 new distinct Tier-1 languages, including 17 classic languages restored from mame's retired relays):
+**156 new steps** — 151 Tier-1 steps (including 17 classic languages restored from mame's retired Ubuntu relays, with `BASIC (bwBASIC)` sharing the BASIC family with mame's `Yabasic` for **+150 net new distinct Tier-1 languages**) plus 5 Tier-2-only implementations (`mksh`, `BusyBox ash`, `yash`, `Chicken Scheme`, `Chez Scheme`):
 
-SNOBOL4, Simula, Oberon, Euphoria, ALGOL 60, BCPL, K (ngn/k), BASIC (bwBASIC), ChucK, dash, groff, Hy, Jsonnet, newLISP, NQP, PicoLisp, Racket, SQL (SQLite), AspectC++, Parrot asm (PASM), xonsh, mksh, BusyBox ash, Arturo, yash, YueScript, Elvish, Rocq, Lean 4, Idris 2, V, Hare, C3, Nelua, Zig, PowerShell, Nushell, Ion, YSH, Murex, Hush, es, Boo, VHDL, Genie, Nix, XQuery, Pkl, Koto, CUE, Macaulay2, Dart, Anko, Tengo, Nickel, Rhai, ><> (Fish), Hexagony, ///, CJam, Underload, Brain-Flak, Singular, FriCAS, Nial, Uiua, BQN, Fantom, Golo, Ballerina, Yeti, Gosu, Frege, J, Starlark, Teal, Umka, F*, MoonScript, Rego, Mathics, Berry, Pyth, Emmental, ArnoldC, LFE, Joy, Factor, Numbat, Frink, Ring, Janet, Io, Picat, CLIPS, Wren, PureScript, Elm, Pyret, ReScript, Wisp, Imba, Dafny, Julia, Maxima, Gri, UCBLogo, GNU Smalltalk, TXR, Gravity, Klong, GSL (Generator Scripting Language), Seed7, Curry, nesC, REDUCE, Lisaac, eC, CDuce, A+, Falcon, Coconut, Gleam, Roc, Inko, Koka, Chapel, Pony, Odin, rep (librep), Gambit Scheme, Chicken Scheme, Chez Scheme, Mercury, Maude, Logtalk, Agda, ACL2, Rail, Kipple, Beatnik, Glass, Taxi, Deadfish~, Lout, Plain TeX, MetaPost, Inform 6, Ink, TADS 3, Uxntal, MMIX, 6502 asm, ARM64 asm, Z80 asm, RISC-V asm.
+SNOBOL4, Simula, Oberon, Euphoria, ALGOL 60, BCPL, K (ngn/k), BASIC (bwBASIC), ChucK, dash, groff, Hy, Jsonnet, newLISP, NQP, PicoLisp, Racket, SQL (SQLite), AspectC++, Parrot asm (PASM), xonsh, mksh, BusyBox ash, Arturo, yash, YueScript, Elvish, Rocq, Lean 4, Idris 2, V, Hare, C3, Nelua, Zig, PowerShell, Nushell, Ion, YSH, Murex, Hush, es, Boo, VHDL, Genie, Nix, XQuery, Pkl, Koto, CUE, Macaulay2, Dart, Anko, Tengo, Nickel, Rhai, ><> (Fish), Hexagony, ///, CJam, Underload, Brain-Flak, Singular, FriCAS, Nial, Uiua, BQN, Fantom, Golo, Ballerina, Yeti, Gosu, Frege, J, Starlark, Teal, Umka, F*, MoonScript, Rego, Mathics, Berry, Pyth, Emmental, ArnoldC, LFE, Joy, Factor, Numbat, Frink, Ring, Janet, Io, Picat, CLIPS, Wren, PureScript, Elm, Pyret, ReScript, Wisp, Imba, Dafny, Julia, Maxima, Gri, UCBLogo, GNU Smalltalk, TXR, Gravity, Klong, GSL (Generator Scripting Language), Seed7, Curry, nesC, REDUCE, Lisaac, eC, CDuce, A+, Falcon, Coconut, Gleam, Roc, Inko, Koka, Chapel, Pony, Odin, rep (librep), Chicken Scheme, Rockstar, Chez Scheme, Mercury, Maude, Logtalk, Agda, ACL2, Rail, Kipple, Beatnik, Glass, Taxi, Deadfish~, Lout, Plain TeX, MetaPost, Inform 6, Ink, TADS 3, Uxntal, MMIX, 6502 asm, ARM64 asm, Z80 asm, RISC-V asm.
 
-See [RELAY-284.md](RELAY-284.md) for how 284 steps fit into a 40.6 KB Ruby quine without blowing through compiler, VM, and memory ceilings (zero-backslash Forth `126 PARSE`, 3-byte base-84 LZ78 in Kotlin, self-reading comment decoders for Shakespeare and historical languages, and interleaved Re-Pair assembly compression).
+See [RELAY-284.md](RELAY-284.md) for how 284 steps fit into a ~41 KB Ruby quine without blowing through compiler, VM, and memory ceilings (zero-backslash Forth `126 PARSE`, 3-byte base-84 LZ78 in Kotlin, self-reading comment decoders for Shakespeare and historical languages, and interleaved Re-Pair assembly compression).
 
 ## Records
 
 We claim records under two transparent counting rules, published in [RECORDS.md](RECORDS.md) so anyone can verify or challenge them:
 
-- **Tier 1, distinct languages:** each language counts once regardless of versions, dialects, or implementations. This relay counts **272** distinct languages (mame's 128 counts 123; [quine-relay-151](https://github.com/exacortex/quine-relay-151) counted 143).
-- **Tier 2, relay steps:** every step runs on its own real interpreter or compiler with its own source file. This relay counts **284** steps.
+- **Tier 1, distinct languages:** each language counts once regardless of versions, dialects, or implementations. This relay counts **273** distinct languages (mame's 128 counts 123; [quine-relay-151](https://github.com/exacortex/quine-relay-151) counted 143).
+- **Tier 2, relay steps:** every step runs on its own real interpreter or compiler with its own source file, with at most 3 steps per language family. This relay counts **284** steps.
 
 See [RECORDS.md](RECORDS.md) for the full rules and leaderboard, and [LANGUAGES.md](LANGUAGES.md) for the step-by-step Tier 1 / Tier 2 audit.
 
@@ -65,8 +64,8 @@ This installs every Ubuntu package, builds all source/release toolchains and bun
       chezscheme chicken-bin chuck clips clisp clojure cmake coffeescript \
       coq crystal dash dc default-jdk-headless dhall dotnet-sdk-10.0 elixir \
       elvish emacs-nox erlang erlang-nox execline f2c fennel fish flex \
-      fp-compiler fricas g++ gambas3-gb-pcre gambas3-scripter gambc gap gawk \
-      gcc gcc-aarch64-linux-gnu gcc-riscv64-linux-gnu gdb gdc \
+      fp-compiler fricas g++ gambas3-gb-pcre gambas3-scripter gap gawk gcc \
+      gcc-aarch64-linux-gnu gcc-riscv64-linux-gnu gdb gdc \
       generator-scripting-language genius gforth gfortran ghc ghdl \
       ghostscript gm2 gnat gnucobol4 gnuplot gobjc golang gpt gri groff \
       groovy guile-3.0 gzip hare haxe hy icont iconx inform6-compiler \
@@ -172,7 +171,7 @@ Then build the bundled interpreters:
     $ ruby vendor/unlambda.rb QR.unl > QR.v
     $ iverilog -o QR QR.v && ./QR -vcd-none > QR.fish.fish
     $ python3 vendor/fish.py QR.fish.fish > QR.hxg
-    $ ruby vendor/hexagony.rb QR.hxg > QR.vim
+    $ ruby /opt/hexagony/interpreter.rb QR.hxg > QR.vim
     $ vim -EsS QR.vim > QR.vb
     $ echo '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup><ItemGroup><Compile Include="QR.vb" /></ItemGroup></Project>' > tmp.vbproj &&
       DOTNET_NOLOGO=1 dotnet run --project tmp.vbproj > QR.wasm
@@ -350,9 +349,9 @@ Then build the bundled interpreters:
     $ mkdir -p qrpony && cp QR.pony qrpony/main.pony && ponyc -V0 -b qrpony.out -o . qrpony &&
       ./qrpony.out > QR.odin
     $ odin run QR.odin -file > QR.rep
-    $ rep QR.rep > QR.gambit.scm
-    $ gsi QR.gambit.scm > QR.chicken.scm
-    $ csi -q -s QR.chicken.scm > QR.chez.ss
+    $ rep QR.rep > QR.chicken.scm
+    $ csi -q -s QR.chicken.scm > QR.rock
+    $ rockstar QR.rock > QR.chez.ss
     $ chezscheme --script QR.chez.ss > QR.p
     $ parser3 QR.p > QR.pas
     $ fpc QR.pas && ./QR > QR.pl
@@ -368,8 +367,8 @@ Then build the bundled interpreters:
     $ swipl -q -t qr -f QR.prolog > QR.acl2
     $ acl2 < QR.acl2 > /dev/null && cat QR_acl2.out > QR.pr
     $ spin -T QR.pr > QR.rail
-    $ ruby vendor/rail.rb QR.rail > QR.kpl
-    $ ruby vendor/kipple.rb QR.kpl > QR.beatnik
+    $ rail QR.rail > QR.kpl
+    $ cipple QR.kpl > QR.beatnik
     $ ruby vendor/beatnik.rb QR.beatnik > QR.glass
     $ ruby vendor/glass.rb QR.glass > QR.taxi
     $ taxi QR.taxi > QR.dft
@@ -495,7 +494,7 @@ Or just run `make check`:
 74  |Unlambda                           |*bundled in vendor/*                                  |mame
 75  |Verilog                            |iverilog                                              |mame
 76  |><> (Fish)                         |*bundled in vendor/*                                  |**this fork**
-77  |Hexagony                           |*bundled in vendor/*                                  |**this fork**
+77  |Hexagony                           |`m-ender/hexagony (official Ruby interpreter)`        |**this fork**
 78  |Vimscript                          |vim                                                   |mame
 79  |Visual Basic                       |dotnet-sdk-10.0                                       |mame
 80  |WebAssembly (Binary format)        |wabt                                                  |mame
@@ -657,8 +656,8 @@ Or just run `make check`:
 236 |Pony                               |`ponyc 0.78.2 release`                                |**this fork**
 237 |Odin                               |`Odin dev-2026-10 release`                            |**this fork**
 238 |rep (librep)                       |rep                                                   |**this fork**
-239 |Gambit Scheme                      |gambc                                                 |**this fork**
-240 |Chicken Scheme                     |chicken-bin                                           |**this fork**
+239 |Chicken Scheme                     |chicken-bin                                           |**this fork**
+240 |Rockstar                           |`Rockstar v2.0.15 release`                            |**this fork**
 241 |Chez Scheme                        |chezscheme                                            |**this fork**
 242 |Parser 3                           |parser3-cgi                                           |mame
 243 |Pascal                             |fp-compiler                                           |mame
@@ -673,8 +672,8 @@ Or just run `make check`:
 252 |Prolog                             |swi-prolog                                            |mame
 253 |ACL2                               |acl2                                                  |**this fork**
 254 |Promela (Spin)                     |spin                                                  |mame
-255 |Rail                               |*bundled in vendor/*                                  |**this fork**
-256 |Kipple                             |*bundled in vendor/*                                  |**this fork**
+255 |Rail                               |`TryItOnline/rail C++ build`                          |**this fork**
+256 |Kipple                             |`cipple 0.2.1 C build`                                |**this fork**
 257 |Beatnik                            |*bundled in vendor/*                                  |**this fork**
 258 |Glass                              |*bundled in vendor/*                                  |**this fork**
 259 |Taxi                               |`BigZaphod Taxi C++ build`                            |**this fork**
@@ -710,7 +709,7 @@ Languages marked *bundled in vendor/* have interpreters included in `vendor/`; s
 
 ### Q. Who made this?
 
-A. The original 128-language relay, its uroboros code generator, and the core compression architecture are by [Yusuke Endoh (mame)](https://github.com/mame). This fork extends the relay from 128 to 284 steps (272 distinct languages), re-engineers the escaping/compression corridors to survive 284 layers, and documents the record rules. Built by [Drawn With Code](https://www.youtube.com/@DrawnWithCode).
+A. The original 128-language relay, its uroboros code generator, and the core compression architecture are by [Yusuke Endoh (mame)](https://github.com/mame). This fork extends the relay from 128 to 284 steps (273 distinct languages), re-engineers the escaping/compression corridors to survive 284 layers, and documents the record rules. Built by [Drawn With Code](https://www.youtube.com/@DrawnWithCode).
 
 ### Q. How does a quine relay work?
 
@@ -739,7 +738,7 @@ A.
 
 ### This fork
 
-- **284 steps / 272 distinct languages, Ubuntu 26.04 (Nov 17, 2026).** Extended from 151 to 284 steps across 21 language batches (systems, theorem provers, logic, array, CAS, JVM, JS-targeted, scripting, shells, historical languages, interactive fiction/typesetting, multi-ISA assembly, and esolangs).
+- **284 steps / 273 distinct languages, Ubuntu 26.04 (Nov 2026).** Extended from 151 to 284 steps across 21 language batches (systems, theorem provers, logic, array, CAS, JVM, JS-targeted, scripting, shells, historical languages, interactive fiction/typesetting, multi-ISA assembly, and esolangs).
 - **151 steps / 143 distinct languages, Ubuntu 26.04 (Nov 13, 2026).** Published at [exacortex/quine-relay-151](https://github.com/exacortex/quine-relay-151).
 
 ### mame's Quine Relay

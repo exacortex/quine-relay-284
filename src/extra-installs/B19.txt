@@ -1,2 +1,2 @@
-# B19: All 6 languages use bundled interpreters in vendor/ (copied by tools/build.sh)
-# executed via ruby or python3 (both already installed in qr157 base image).
+# B19: Official m-ender/hexagony interpreter (pinned commit b674f59a0c9e10c1867bd9cf34f676ba89f0fc1c)
+RUN mkdir -p /opt/hexagony && curl --retry 5 -fsSL https://github.com/m-ender/hexagony/archive/b674f59a0c9e10c1867bd9cf34f676ba89f0fc1c.tar.gz | tar -xz -C /opt/hexagony --strip-components=1 && printf 'o;k;@' > /tmp/t.hxg && test "$(ruby /opt/hexagony/interpreter.rb /tmp/t.hxg)" = "ok" && rm -f /tmp/t.hxg

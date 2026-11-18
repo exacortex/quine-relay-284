@@ -675,7 +675,7 @@ QR.vim: QR.hxg
 	@echo "##  77: Hexagony -> Vimscript  ##"
 	@echo "#################################"
 	@echo
-	ruby vendor/hexagony.rb QR.hxg > QR.vim
+	ruby /opt/hexagony/interpreter.rb QR.hxg > QR.vim
 
 QR.vb: QR.vim
 	@echo
@@ -2040,29 +2040,29 @@ QR.rep: QR.odin
 	@echo
 	odin run QR.odin -file > QR.rep
 
-QR.gambit.scm: QR.rep
+QR.chicken.scm: QR.rep
 	@echo
-	@echo "##########################################"
-	@echo "##  238: rep (librep) -> Gambit Scheme  ##"
-	@echo "##########################################"
+	@echo "###########################################"
+	@echo "##  238: rep (librep) -> Chicken Scheme  ##"
+	@echo "###########################################"
 	@echo
-	rep QR.rep > QR.gambit.scm
+	rep QR.rep > QR.chicken.scm
 
-QR.chicken.scm: QR.gambit.scm
+QR.rock: QR.chicken.scm
 	@echo
-	@echo "############################################"
-	@echo "##  239: Gambit Scheme -> Chicken Scheme  ##"
-	@echo "############################################"
+	@echo "#######################################"
+	@echo "##  239: Chicken Scheme -> Rockstar  ##"
+	@echo "#######################################"
 	@echo
-	gsi QR.gambit.scm > QR.chicken.scm
+	csi -q -s QR.chicken.scm > QR.rock
 
-QR.chez.ss: QR.chicken.scm
+QR.chez.ss: QR.rock
 	@echo
-	@echo "##########################################"
-	@echo "##  240: Chicken Scheme -> Chez Scheme  ##"
-	@echo "##########################################"
+	@echo "####################################"
+	@echo "##  240: Rockstar -> Chez Scheme  ##"
+	@echo "####################################"
 	@echo
-	csi -q -s QR.chicken.scm > QR.chez.ss
+	rockstar QR.rock > QR.chez.ss
 
 QR.p: QR.chez.ss
 	@echo
@@ -2187,7 +2187,7 @@ QR.kpl: QR.rail
 	@echo "##  255: Rail -> Kipple  ##"
 	@echo "###########################"
 	@echo
-	ruby vendor/rail.rb QR.rail > QR.kpl
+	rail QR.rail > QR.kpl
 
 QR.beatnik: QR.kpl
 	@echo
@@ -2195,7 +2195,7 @@ QR.beatnik: QR.kpl
 	@echo "##  256: Kipple -> Beatnik  ##"
 	@echo "##############################"
 	@echo
-	ruby vendor/kipple.rb QR.kpl > QR.beatnik
+	cipple QR.kpl > QR.beatnik
 
 QR.glass: QR.beatnik
 	@echo

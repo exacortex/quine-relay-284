@@ -298,7 +298,7 @@ class Ink < CodeGen
   def check(prev)
     raise unless prev.ascii_only? && prev.end_with?("\n")
     raise if prev.include?("\r")
-    raise "Ink: >1050 lines risks inklecate sleep" if prev.lines.size > 1050
+    raise "Ink: >1250 lines risks inklecate sleep" if prev.lines.size > 1250
   end
 end
 
@@ -374,7 +374,7 @@ class Taxi < CodeGen
   Apt = [nil]
   Code = %q(%("#{PREV}" is waiting at the Writer\x27s Depot. Go to Writer\x27s Depot: west 1st left, 2nd right, 1st left, 2nd left. Pickup a passenger going to the Post Office. Go to the Post Office: north 1st right, 2nd right, 1st left. Go to the Taxi Garage: north 1st right, 1st left, 1st right.))
   def check(prev)
-    raise "Taxi: quote or backslash or newline" if prev =~ /["\\\n]/
+    raise "Taxi: quote or backslash or newline" if prev.index(34.chr) || prev.index(92.chr) || prev.index(10.chr)
   end
 end
 
@@ -383,9 +383,9 @@ class Glass < CodeGen
   File = "QR.glass"
   Cmd = "ruby vendor/glass.rb QR.glass > OUTFILE"
   Apt = [nil]
-  Code = %q((b20u=(PREV);b20m=b20u[/\A\x22[icd]+/];b20s=b20m[1..].scan(/i+c/).map{|b20x|(b20x.size-1).chr}*"";b20t=b20u[b20m.size..];%({M[m(_o)O#{33.chr}(_s)S#{33.chr}(_a)A#{33.chr}(p)"#{e[b20s]}"$(t)"#{e[b20t]}"$"#{B}\x22"(_o)o.?(n)(p)*(_s)l.?$(i)(0)$/n(b)(p)*(i)*(_s)i.?(_s)(ns).?$(d)(b)*$/b"i"(_o)o.?(b)(b)*(1)(_a)s.?$#{B}"c"(_o)o.?/d"d"(_o)o.?(d)(d)*(1)(_a)s.?$#{B}(i)(i)*(1)(_a)a.?$(n)(n)*(1)(_a)s.?$#{B}(t)*(_o)o.?]})))
+  Code = %q((b20u=(PREV);b20m=b20u[/\A\x22[icd]+/];b20s=b20m[1..].scan(/i+c/).map{|b20x|(b20x.size-1).chr}*"";b20h={"\x7e"=>"\x7e\x7e","\x22"=>"\x7eq",B=>"\x7eb",N=>"\x7en","["=>"\x7el","]"=>"\x7er"};b20e=b20s.gsub(/[\x7e\x22\\\\\n\[\]]/){b20h[$&]};b20t=b20u[b20m.size+1..];"{M[m(_o)O\x21(_s)S\x21(_a)A\x21(q)<34>(_s)(ns).?=(p)\x22#{b20e}\x22=(q)*(_o)o.?(n)(p)*(_s)l.?=(i)<0>=/n(b)(p)*(i)*(_s)i.?(_s)(sn).?=(e)(b)*<126>(_a)e.?=/e(i)(i)*<1>(_a)a.?=(n)(n)*<1>(_a)s.?=(c)(p)*(i)*(_s)i.?(_s)(sn).?=(f)(c)*<113>(_a)e.?=/f(b)<34>=(f)<0>=#{B}(f)(c)*<98>(_a)e.?=/f(b)<92>=(f)<0>=#{B}(f)(c)*<110>(_a)e.?=/f(b)<10>=(f)<0>=#{B}(f)(c)*<108>(_a)e.?=/f(b)<91>=(f)<0>=#{B}(f)(c)*<114>(_a)e.?=/f(b)<93>=(f)<0>=#{B}(e)<0>=#{B}(d)(b)*=/b\x22i\x22(_o)o.?(b)(b)*<1>(_a)s.?=#{B}\x22c\x22(_o)o.?/d\x22d\x22(_o)o.?(d)(d)*<1>(_a)s.?=#{B}(i)(i)*<1>(_a)a.?=(n)(n)*<1>(_a)s.?=#{B}(q)*(_o)o.?\x22#{b20t}\x22(_o)o.?]}"))
   def check(prev)
-    raise "Glass: unexpected Taxi" unless prev.start_with?(?")
+    raise "Glass: unexpected Taxi" unless prev.start_with?(34.chr)
   end
 end
 
@@ -403,9 +403,9 @@ end
 class Kipple < CodeGen
   Name = "Kipple"
   File = "QR.kpl"
-  Cmd = "ruby vendor/kipple.rb QR.kpl > OUTFILE"
+  Cmd = "cipple QR.kpl > OUTFILE"
   Apt = [nil]
-  Code = %q((b20a=(PREV).scan(/E+/).map{|b20x|b20x.size.chr}*"";%(75>o 67>o 65>o 74>o <#{b20a.gsub(/[#{33.chr}\x22\x27()<>\x5b\x5c\x5d\n]/){"#{33.chr}%02x"%$&.ord}}>>i (i i>b 32>o 65>o 74>o 32>o (b 69>o b-1 b?) 32>o 75>o))))
+  Code = %q((b20s=(PREV).scan(/E+/).map{|b20x|b20x.size.chr}*"";b20p=b20s.scan(/[\x00-\x09\x0b-\x21\x23-\x5a\x5e-\x7f]+|./m).map{|b20c|b20c.size==1&&"\x0a\x22\x5b\x5c\x5d".index(b20c) ? "#{b20c.ord}>i" : "i<\x22#{b20c}\x22"}*" ";"75>o 67>o 65>o 74>o #{b20p} (i i>b 32>o 65>o 74>o 32>o (b 69>o b-1 b?) 32>o 75>o)"))
   def check(prev)
     raise "Kipple: unexpected Beatnik" unless prev.end_with?("JACK")
   end
@@ -414,11 +414,11 @@ end
 class Rail < CodeGen
   Name = "Rail"
   File = "QR.rail"
-  Cmd = "ruby vendor/rail.rb QR.rail > OUTFILE"
+  Cmd = "rail QR.rail > OUTFILE"
   Apt = [nil]
-  Code = %q(%($\n -[#{PREV}]o#))
+  Code = %q(%($ 'main'#{N} #{B}#{N}  #{B}-[#{(PREV)}]o#))
   def check(prev)
-    raise "Rail: bracket or backslash or newline" if prev =~ /[\\\[\]\n]/
+    raise "Rail: bracket or backslash or newline" if prev.index(92.chr) || prev.index("[") || prev.index("]") || prev.index(10.chr)
   end
 end
 
@@ -623,12 +623,26 @@ end
 
 # ---- Added past 151: Scheme dialects + librep in the low-backslash zone (payload ~17 KB, bs~0 here) ----
 # They escape backslash and quote, so they sit where the payload has almost no backslashes.
+
+# RUN_AFTER: ChickenScheme
+# RUN_AFTER: Rockstar
 class ChezScheme < CodeGen
   Name = "Chez Scheme"
   File = "QR.chez.ss"
   Cmd = "chezscheme --script QR.chez.ss > OUTFILE"
   Apt = "chezscheme"
-  Code = %q(%((display "#{e[PREV]}")))
+  Code = %q(%((display "#{e[PREV]}")#{N}))
+end
+
+class Rockstar < CodeGen
+  Name = "Rockstar"
+  File = "QR.rock"
+  Cmd = "rockstar QR.rock > OUTFILE"
+  Apt = [nil]
+  Code = %q((b20c=(PREV).chomp.split(34.chr,-1).map{|b20g|34.chr+b20g+34.chr}*" + q + ";"let q be 34#{N}burn q#{N}shout #{b20c}#{N}"))
+  def check(prev)
+    raise "Rockstar: expected trailing newline and no backslash/inner newline" if !prev.end_with?(10.chr) || prev[0..-2].index(92.chr) || prev[0..-2].index(10.chr)
+  end
 end
 
 class ChickenScheme < CodeGen
@@ -639,13 +653,6 @@ class ChickenScheme < CodeGen
   Code = %q(%((display "#{e[PREV]}")))
 end
 
-class GambitScheme < CodeGen
-  Name = "Gambit Scheme"
-  File = "QR.gambit.scm"
-  Cmd = "gsi QR.gambit.scm > OUTFILE"
-  Apt = "gambc"
-  Code = %q(%((display "#{e[PREV]}")))
-end
 
 class LibRep < CodeGen
   Name = "rep (librep)"
@@ -2902,7 +2909,7 @@ class Slashes < CodeGen
   File = "QR.slashes"
   Cmd = "ruby vendor/slashes.rb QR.slashes > OUTFILE"
   Apt = [nil]
-  Code = %q((b19s=(PREV).tr("\x22",33.chr);b19r=[*48..82,*84..90,*97..122];b19r.map{|b19c|b19o={};b19s[0,4000].scan(/../){b19o[$&]=b19o[$&].to_i+1};b19n=b19o.key(b19o.values.max)||"()";b19s=b19s.gsub(b19n,b19c.chr);"/#{b19c.chr}/#{b19n}/"}.reverse*""+"/#{33.chr}/\"/"+b19s))
+  Code = %q((b19s=(PREV).tr("\x22",33.chr);b19r=[*48..82,*84..90,*97..122];b19r.map{|b19c|b19o={};b19s[0,4000].scan(/../){b19o[$&]=b19o[$&].to_i+1};b19n=b19o.key(b19o.values.max)||"()";b19s=b19s.gsub(b19n,b19c.chr);"/#{b19c.chr}/#{b19n}/"}.reverse*""+"/#{33.chr}/"+34.chr+"/"+b19s))
   def check(prev)
     raise "Slashes: unexpected char" if prev =~ /[^"S(){}]/
   end
@@ -3018,9 +3025,9 @@ end
 class Hexagony < CodeGen
   Name = "Hexagony"
   File = "QR.hxg"
-  Cmd = "ruby vendor/hexagony.rb QR.hxg > OUTFILE"
+  Cmd = "ruby /opt/hexagony/interpreter.rb QR.hxg > OUTFILE"
   Apt = [nil]
-  Code = %q((b19u=(PREV);b19v=0;b19w=b19u.bytes.map{|b19b|b19d=b19b==b19v ? "" : b19b==b19v+1 ? ")" : b19b==b19v-1 ? "(" : b19b>64&&b19b<91||b19b>96&&b19b<123 ? (b19v=b19b).chr : "-#{b19v=b19b}";b19v=b19b if b19d.size<2;b19d+";"}*""+"@";b19m=1;b19m+=1 while 3*b19m*(b19m-1)<b19w.size;b19w=b19w.ljust(3*b19m*(b19m-1)+1,".");b19a=[];b19i=0;(2*b19m-1).times{|b19k|b19q=b19k*b19m%(2*b19m-1);b19l=b19m+(b19q<b19m ? b19q : 2*b19m-2-b19q);b19a[b19q]=b19w[b19i,b19l];b19i+=b19l};b19a*""))
+  Code = %q((b19u=(PREV);b19v=0;b19t=b19u.bytes.map{|b19b|b19d=b19b==b19v ? "" : b19b==b19v+1 ? ")" : b19b==b19v-1 ? "(" : b19b>64&&b19b<91||b19b>96&&b19b<123 ? (b19v=b19b).chr : "-#{b19v=b19b}";b19v=b19b if b19d.size<2;b19d+";"}+["@"];b19z=b19t.sum(&:size);b19m=4;b19m+=1 while 3*b19m*(b19m-1)-14*b19m<b19z;b19p=0;(0...2*b19m-1).map{|b19i|b19l=2*b19m-1-(b19m-1-b19i).abs;b19c=b19i==0||b19i==2*b19m-2 ? b19l-1 : b19i.odd? ? b19l-2 : b19i==b19m-1 ? b19l-4 : b19l-3;b19s=+"";(b19s<<b19t[b19p];b19p+=1) while b19p<b19t.size&&b19s.size+b19t[b19p].size<=b19c;b19s=b19s.ljust(b19c,".");b19i==0 ? b19s+"<" : b19i==2*b19m-2 ? ">"+b19s : b19i.even? ? (b19i<b19m ? ".>" : ">")+b19s+(b19i<b19m-1 ? "<" : "<.") : "/"+b19s.reverse+"/"}*""))
   def check(prev)
     raise "Hexagony: non-ASCII" unless prev.ascii_only?
   end
@@ -3031,7 +3038,7 @@ class FishEsolang < CodeGen
   File = "QR.fish.fish"
   Cmd = "python3 vendor/fish.py QR.fish.fish > OUTFILE"
   Apt = [nil]
-  Code = %q(%(a0.l?#{33.chr};o20."#{(PREV).reverse.gsub(/[\n\x22]/){$&==N ? %("a") : %("b3*1+")}}"20.))
+  Code = %q(%(a0.l?#{33.chr};o20."#{(PREV).reverse.gsub(Regexp.union(N,34.chr)){$&==N ? %("a") : %("b3*1+")}}"20.))
   def check(prev)
     raise "Fish: non-printable byte" unless prev.ascii_only?
   end
@@ -3276,15 +3283,15 @@ class Macaulay2 < CodeGen
 end
 
 # RUN_AFTER: Koto
-# CUE raw string #"..."# (same rules as Pkl). cue export --out text adds a newline; Macaulay2 (next) ignores it.
+# CUE raw string ###"..."### (same rules as Pkl). cue export --out text adds a newline; Macaulay2 (next) ignores it.
 class CUE < CodeGen
   Name = "CUE"
   File = "QR.cue"
   Cmd = "cue export --out text -e o QR.cue > OUTFILE"
   Apt = [nil]                # go install cuelang.org/go/cmd/cue@v0.17.1, see installs.txt
-  Code = %q(%(o:#"#{PREV}"#))
+  Code = %q(%(o:###"#{PREV}"###))
   def check(prev)
-    raise "CUE: payload holds \"#, \\# or a newline" if prev.include?('"#') || prev.include?("\\#") || prev.include?("\n")
+    raise "CUE: payload holds \"###, \\### or a newline" if prev.include?('"###') || prev.include?("\\###") || prev.include?("\n")
   end
 end
 
@@ -3307,9 +3314,9 @@ class Pkl < CodeGen
   File = "QR.pkl"
   Cmd = "pkl eval QR.pkl > OUTFILE"
   Apt = [nil]                # Pkl 0.33.0 release binary, see installs.txt
-  Code = %q(%(output{text=##"#{PREV}"##}))
+  Code = %q(%(output{text=####"#{PREV}"####}))
   def check(prev)
-    raise "Pkl: payload holds \"##, \\## or a newline" if prev.include?('"##') || prev.include?("\\##") || prev.include?("\n")
+    raise "Pkl: payload holds \"####, \\#### or a newline" if prev.include?('"####') || prev.include?("\\####") || prev.include?("\n")
   end
 end
 

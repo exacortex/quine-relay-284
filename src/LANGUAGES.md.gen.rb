@@ -21,7 +21,8 @@ MAME_128 = %w[
 ]
 
 # Steps that do not count under Tier 1 (distinct languages), and why.
-# Every other step counts once under both tiers. See ../RECORDS.md for the rules.
+# Every other step counts once under both tiers, with at most 3 steps per language family.
+# See ../RECORDS.md for the rules.
 MERGED = {
   "Ook!" => "same language as Brainfuck with the words swapped",
   "JSFuck" => "a subset of JavaScript, run by node",
@@ -32,16 +33,16 @@ MERGED = {
   "BusyBox ash" => "another POSIX sh implementation (dash counts)",
   "mksh" => "another ksh implementation (ksh counts)",
   "Yabasic" => "another BASIC dialect (BASIC (bwBASIC) counts)",
-  "Gambit Scheme" => "another Scheme implementation (Scheme counts)",
   "Chicken Scheme" => "another Scheme implementation (Scheme counts)",
   "Chez Scheme" => "another Scheme implementation (Scheme counts)",
 }
 
+# The 17 classic languages retired from earlier Ubuntu editions of mame/quine-relay and restored here.
 RESTORED_MAME = [
-  "AspectC++", "Parrot asm (PASM)", "Boo", "Singular", "Maxima", "Gri", "UCBLogo",
+  "AspectC++", "Parrot asm (PASM)", "Boo", "Maxima", "Gri", "UCBLogo",
   "GNU Smalltalk", "Julia", "Dafny", "GSL (Generator Scripting Language)", "Curry",
   "nesC", "Lisaac", "eC", "CDuce", "A+", "Falcon"
-] - ["Singular"]
+]
 
 NOTES = {
   "Perl 6" => "renamed Raku in 2019; its own language, separate from Perl 5",
@@ -53,6 +54,7 @@ end
 step_names = RunSteps.map {|s| s.name }
 raise "unknown name in MERGED: #{ (MERGED.keys - step_names).inspect }" unless (MERGED.keys - step_names).empty?
 raise "missing MAME_128 step: #{ (MAME_128 - step_names).inspect }" unless (MAME_128 - step_names).empty?
+raise "expected 17 RESTORED_MAME" unless RESTORED_MAME.size == 17 && (RESTORED_MAME - step_names).empty?
 
 t1 = RunSteps.size - MERGED.size
 rows = RunSteps.map.with_index do |s, i|

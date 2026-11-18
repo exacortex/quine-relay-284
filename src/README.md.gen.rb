@@ -55,6 +55,7 @@ extra_installs = {
   "Tengo" => "go install github.com/d5/tengo/v2/cmd/tengo@v2.17.0",
   "Nickel" => "cargo install nickel-lang-cli@1.18.0",
   "Rhai" => "cargo install rhai@1.27.0",
+  "Hexagony" => "m-ender/hexagony (official Ruby interpreter)",
   "Nial" => "Q'Nial nialcore source build",
   "Uiua" => "cargo install uiua@0.19.1",
   "BQN" => "CBQN v0.9.0 (clang build)",
@@ -113,8 +114,11 @@ extra_installs = {
   "Chapel" => "Chapel 2.10.0 (.deb)",
   "Pony" => "ponyc 0.78.2 release",
   "Odin" => "Odin dev-2026-10 release",
+  "Rockstar" => "Rockstar v2.0.15 release",
   "Mercury" => "Mercury 22.01.8 apt repository",
   "Logtalk" => "Logtalk 3.102.0 (.deb)",
+  "Rail" => "TryItOnline/rail C++ build",
+  "Kipple" => "cipple 0.2.1 C build",
   "Taxi" => "BigZaphod Taxi C++ build",
   "Lout" => "Basser Lout source build",
   "Ink" => "Inklecate v1.2.1 release",
@@ -167,15 +171,15 @@ File.write("../README.md", ERB.new(DATA.read, trim_mode: "%").result(binding))
 __END__
 # Quine Relay 284
 
-**A 284-step quine relay across 272 distinct programming languages, verified end to end on Ubuntu 26.04.**
-It extends [Yusuke Endoh's Quine Relay](https://github.com/mame/quine-relay) (128 steps / 123 distinct languages) with <%= new_steps.size %> more steps (+149 distinct languages) — more than doubling the previous world record.
+**A 284-step quine relay across 273 distinct programming languages, verified end to end from a clean Ubuntu 26.04 Docker build.**
+It extends [Yusuke Endoh's Quine Relay](https://github.com/mame/quine-relay) (128 steps / 123 distinct languages) with <%= new_steps.size %> more steps (+150 net new distinct languages) — more than doubling the previous world record under both counting rules.
 
 ## What this is
 
 [QR.rb](QR.rb) is a <%= RunSteps[0].name %> program that generates
 a <%= RunSteps[1].name %> program that generates
 a <%= RunSteps[2].name %> program that generates
-...(through <%= RunSteps.size %> steps / 272 distinct languages in total)...
+...(through <%= RunSteps.size %> steps / 273 distinct languages in total)...
 a <%= RunSteps[-1].name %> program that generates
 the original <%= RunSteps[0].name %> code again.
 
@@ -187,30 +191,29 @@ The languages in red are the <%= new_steps.size %> steps added in this fork. Eve
 
 ## Proof that it works
 
-On November 17, 2026, the full 284-step relay ran in Docker on Ubuntu 26.04:
+In November 2026, the full 284-step relay built from scratch (`FROM ubuntu:26.04`) using this repository's [`Dockerfile`](Dockerfile) and ran end to end:
 
 - **All <%= RunSteps.size %> steps ran consecutively on their real interpreters and compilers.** Zero stand-ins, zero skipped steps.
-- Step <%= RunSteps.size %> (<%= RunSteps[-1].name %>) printed `QR2.rb`, byte-for-byte identical to the 40,660-byte `QR.rb`.
+- Step <%= RunSteps.size %> (<%= RunSteps[-1].name %>) printed `QR2.rb`, byte-for-byte identical to `QR.rb` (<%= File.size("../QR.rb") rescue 40660 %> bytes).
 - `make check` passed. SHA-256 of both files:
   `<%= File.read("../SHA256SUMS")[/\h{64}/] rescue "see SHA256SUMS" %>`
-- The full verification lap finished in **2,279 seconds (37 minutes 59 seconds)**.
 
-The complete logs and payload profile are in [`proof/`](proof/). You can repeat the entire build and run with the two Docker commands below.
+The complete standalone `docker build` log, `docker run` log, and payload profile are in [`proof/`](proof/). Anyone can repeat the exact build and run with the two Docker commands below.
 
 ## What's new in this fork
 
-**<%= new_steps.size %> new steps** (149 new distinct Tier-1 languages, including 17 classic languages restored from mame's retired relays):
+**<%= new_steps.size %> new steps** — 151 Tier-1 steps (including 17 classic languages restored from mame's retired Ubuntu relays, with `BASIC (bwBASIC)` sharing the BASIC family with mame's `Yabasic` for **+150 net new distinct Tier-1 languages**) plus 5 Tier-2-only implementations (`mksh`, `BusyBox ash`, `yash`, `Chicken Scheme`, `Chez Scheme`):
 
 <%= new_steps.map {|s| s.name }.join(", ") %>.
 
-See [RELAY-284.md](RELAY-284.md) for how 284 steps fit into a 40.6 KB Ruby quine without blowing through compiler, VM, and memory ceilings (zero-backslash Forth `126 PARSE`, 3-byte base-84 LZ78 in Kotlin, self-reading comment decoders for Shakespeare and historical languages, and interleaved Re-Pair assembly compression).
+See [RELAY-284.md](RELAY-284.md) for how 284 steps fit into a ~41 KB Ruby quine without blowing through compiler, VM, and memory ceilings (zero-backslash Forth `126 PARSE`, 3-byte base-84 LZ78 in Kotlin, self-reading comment decoders for Shakespeare and historical languages, and interleaved Re-Pair assembly compression).
 
 ## Records
 
 We claim records under two transparent counting rules, published in [RECORDS.md](RECORDS.md) so anyone can verify or challenge them:
 
-- **Tier 1, distinct languages:** each language counts once regardless of versions, dialects, or implementations. This relay counts **272** distinct languages (mame's 128 counts 123; [quine-relay-151](https://github.com/exacortex/quine-relay-151) counted 143).
-- **Tier 2, relay steps:** every step runs on its own real interpreter or compiler with its own source file. This relay counts **<%= RunSteps.size %>** steps.
+- **Tier 1, distinct languages:** each language counts once regardless of versions, dialects, or implementations. This relay counts **273** distinct languages (mame's 128 counts 123; [quine-relay-151](https://github.com/exacortex/quine-relay-151) counted 143).
+- **Tier 2, relay steps:** every step runs on its own real interpreter or compiler with its own source file, with at most 3 steps per language family. This relay counts **<%= RunSteps.size %>** steps.
 
 See [RECORDS.md](RECORDS.md) for the full rules and leaderboard, and [LANGUAGES.md](LANGUAGES.md) for the step-by-step Tier 1 / Tier 2 audit.
 
@@ -263,7 +266,7 @@ Languages marked *bundled in vendor/* have interpreters included in `vendor/`; s
 
 ### Q. Who made this?
 
-A. The original 128-language relay, its uroboros code generator, and the core compression architecture are by [Yusuke Endoh (mame)](https://github.com/mame). This fork extends the relay from 128 to 284 steps (272 distinct languages), re-engineers the escaping/compression corridors to survive 284 layers, and documents the record rules. Built by [Drawn With Code](https://www.youtube.com/@DrawnWithCode).
+A. The original 128-language relay, its uroboros code generator, and the core compression architecture are by [Yusuke Endoh (mame)](https://github.com/mame). This fork extends the relay from 128 to 284 steps (273 distinct languages), re-engineers the escaping/compression corridors to survive 284 layers, and documents the record rules. Built by [Drawn With Code](https://www.youtube.com/@DrawnWithCode).
 
 ### Q. How does a quine relay work?
 
@@ -292,7 +295,7 @@ A.
 
 ### This fork
 
-- **284 steps / 272 distinct languages, Ubuntu 26.04 (Nov 17, 2026).** Extended from 151 to 284 steps across 21 language batches (systems, theorem provers, logic, array, CAS, JVM, JS-targeted, scripting, shells, historical languages, interactive fiction/typesetting, multi-ISA assembly, and esolangs).
+- **284 steps / 273 distinct languages, Ubuntu 26.04 (Nov 2026).** Extended from 151 to 284 steps across 21 language batches (systems, theorem provers, logic, array, CAS, JVM, JS-targeted, scripting, shells, historical languages, interactive fiction/typesetting, multi-ISA assembly, and esolangs).
 - **151 steps / 143 distinct languages, Ubuntu 26.04 (Nov 13, 2026).** Published at [exacortex/quine-relay-151](https://github.com/exacortex/quine-relay-151).
 
 ### mame's Quine Relay

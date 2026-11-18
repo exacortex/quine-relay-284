@@ -1,7 +1,7 @@
 require_relative "code-gen"
 
 apts = RunSteps.flat_map {|s| s.apt }
-other_packages = %w(libpng-dev libgd-dev libfl-dev groff flex bison curl)
+other_packages = %w(libpng-dev libgd-dev libfl-dev groff flex bison curl git ca-certificates)
 
 apts = [*apts.flatten.compact.uniq, *other_packages].uniq.sort
 
@@ -50,7 +50,7 @@ end
 dockerfile = []
 dockerfile << "FROM ubuntu:#{ `bash -c 'source /etc/os-release && echo $VERSION_ID'`.chomp }"
 dockerfile << "ENV DEBIAN_FRONTEND=noninteractive CARGO_HTTP_MULTIPLEXING=false CARGO_NET_RETRY=10"
-dockerfile << "RUN apt-get update && apt-get upgrade -y && apt-get -qq install -y apt-utils moreutils > /dev/null && apt-get clean"
+dockerfile << "RUN dpkg-divert --quiet --local --rename --add /usr/bin/sync && ln -sf /bin/true /usr/bin/sync && apt-get update && apt-get upgrade -y && apt-get -qq install -y apt-utils moreutils > /dev/null && apt-get clean"
 apts.each_slice(20) do |apt|
   dockerfile << "RUN chronic apt-get -qq install -y #{ apt.join(" ") } && chronic apt-get clean"
 end
@@ -63,7 +63,7 @@ dockerfile << "RUN cargo install --root /usr/local rhai@1.27.0 --features bin-fe
 dockerfile.concat(squash_installs(Dir[File.join(__dir__, "extra-installs", "*.txt")].sort))
 dockerfile << "ADD . /usr/local/share/quine-relay"
 dockerfile << "WORKDIR /usr/local/share/quine-relay"
-dockerfile << "RUN make -C vendor"
+dockerfile << "RUN make -C vendor && rm -f /usr/bin/sync && dpkg-divert --quiet --local --rename --remove /usr/bin/sync"
 dockerfile << "CMD make check -j 10000"
 
 File.write("../Dockerfile", dockerfile.join("\n") + "\n")

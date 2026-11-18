@@ -76,12 +76,12 @@ Frink: frink/frink.jar
   * https://frinklang.org/ (Alan Eliasen)
   * License: freeware / binary redistribution
 
+K (ngn/k): ngnk-b9eeb91e.tar.gz
+  * https://codeberg.org/ngn/k (commit b9eeb91e0343ef6029f59d55dd98f82667b9bd59)
+  * License: AGPLv3
+
 ><> (Fish): fish.py
   * self-made (https://esolangs.org/wiki/%3E%3C%3E)
-  * License: MIT
-
-Hexagony: hexagony.rb
-  * self-made (https://esolangs.org/wiki/Hexagony)
   * License: MIT
 
 /// (Slashes): slashes.rb
@@ -101,15 +101,7 @@ Brain-Flak: brain_flak.rb
   * License: MIT
 
 Emmental: emmental.rb
-  * self-made (https://esolangs.org/wiki/Emmental)
-  * License: MIT
-
-Rail: rail.rb
-  * self-made (https://esolangs.org/wiki/Rail)
-  * License: MIT
-
-Kipple: kipple.rb
-  * self-made (https://esolangs.org/wiki/Kipple)
+  * self-made, verified against Chris Pressey's catseye/Emmental (https://esolangs.org/wiki/Emmental)
   * License: MIT
 
 Beatnik: beatnik.rb
@@ -117,7 +109,7 @@ Beatnik: beatnik.rb
   * License: MIT
 
 Glass: glass.rb
-  * self-made (https://esolangs.org/wiki/Glass)
+  * self-made bytecode runner matching Gregor Richards' glass-0.12 C++ spec (https://esolangs.org/wiki/Glass)
   * License: MIT
 
 Deadfish~: deadfish_tilde.rb

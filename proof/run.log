@@ -505,7 +505,7 @@ python3 vendor/fish.py QR.fish.fish > QR.hxg
 ##  77: Hexagony -> Vimscript  ##
 #################################
 
-ruby vendor/hexagony.rb QR.hxg > QR.vim
+ruby /opt/hexagony/interpreter.rb QR.hxg > QR.vim
 
 #####################################
 ##  78: Vimscript -> Visual Basic  ##
@@ -525,7 +525,7 @@ DOTNET_NOLOGO=1 dotnet run --project tmp.vbproj > QR.wasm
 ####################################################################
 
 node --experimental-wasi-unstable-preview1 vendor/wasi-runtime.js QR.wasm > QR.wat
-(node:1459) ExperimentalWarning: WASI is an experimental feature and might change at any time
+(node:1455) ExperimentalWarning: WASI is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 
 ###################################################
@@ -534,7 +534,7 @@ node --experimental-wasi-unstable-preview1 vendor/wasi-runtime.js QR.wasm > QR.w
 
 wat2wasm QR.wat -o QR.wat.wasm
 node --experimental-wasi-unstable-preview1 vendor/wasi-runtime.js QR.wat.wasm > QR.ws
-(node:1475) ExperimentalWarning: WASI is an experimental feature and might change at any time
+(node:1471) ExperimentalWarning: WASI is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 
 ##############################
@@ -603,7 +603,7 @@ cat QR_fricas.out > QR.azm
 ########################
 
 zoem -i QR.azm > QR.ndf
-[zoem] read chunk of size <1486989>
+[zoem] read chunk of size <1485676>
 [zoem] read chunk of size <0>
 
 #######################
@@ -1001,7 +1001,7 @@ fennel QR.fnl > QR.fl
 flex -o QR.fl.c QR.fl
 gcc -o QR QR.fl.c
 QR.fl: In function 'main':
-QR.fl:3:439978: warning: trigraph '??<' ignored, use '-trigraphs' to enable [-Wtrigraphs]
+QR.fl:3:532718: warning: trigraph '??=' ignored, use '-trigraphs' to enable [-Wtrigraphs]
     3 | %%
 ./QR > QR.fish
 
@@ -1175,10 +1175,66 @@ java QR > QR.purs
 ##############################
 
 purs compile -o /opt/purs/out QR.purs '/opt/purs/lib/*/src/**/*.purs'
-[1 of 1] Compiling QR
+[ 1 of 57] Compiling Type.Proxy
+[ 2 of 57] Compiling Record.Unsafe
+[ 4 of 57] Compiling Data.Unit
+[ 3 of 57] Compiling Data.Void
+[ 5 of 57] Compiling Data.NaturalTransformation
+[ 6 of 57] Compiling Data.Boolean
+[ 7 of 57] Compiling Control.Semigroupoid
+[ 8 of 57] Compiling Control.Category
+[ 9 of 57] Compiling Data.Symbol
+[10 of 57] Compiling Data.HeytingAlgebra
+[11 of 57] Compiling Data.Semiring
+[12 of 57] Compiling Data.Semigroup
+[13 of 57] Compiling Data.Show
+[14 of 57] Compiling Data.Ring
+[15 of 57] Compiling Data.Generic.Rep
+[16 of 57] Compiling Data.BooleanAlgebra
+[17 of 57] Compiling Data.Eq
+[18 of 57] Compiling Data.CommutativeRing
+[19 of 57] Compiling Data.Ordering
+[20 of 57] Compiling Data.EuclideanRing
+[21 of 57] Compiling Data.Ord
+[22 of 57] Compiling Data.DivisionRing
+[23 of 57] Compiling Data.Field
+[24 of 57] Compiling Data.Function
+[25 of 57] Compiling Data.Bounded
+[26 of 57] Compiling Data.Reflectable
+[27 of 57] Compiling Data.Monoid
+[28 of 57] Compiling Data.Functor
+[29 of 57] Compiling Data.Bounded.Generic
+[30 of 57] Compiling Control.Apply
+[31 of 57] Compiling Data.Monoid.Generic
+[32 of 57] Compiling Control.Applicative
+[33 of 57] Compiling Control.Bind
+[34 of 57] Compiling Control.Monad
+[35 of 57] Compiling Prelude
+[36 of 57] Compiling Data.Monoid.Disj
+[37 of 57] Compiling Data.Monoid.Dual
+[38 of 57] Compiling Data.Ring.Generic
+[39 of 57] Compiling Data.Monoid.Endo
+[41 of 57] Compiling Data.HeytingAlgebra.Generic
+[40 of 57] Compiling Data.Monoid.Additive
+[42 of 57] Compiling Data.Semigroup.Generic
+[43 of 57] Compiling Data.Ord.Generic
+[44 of 57] Compiling Data.Show.Generic
+[45 of 57] Compiling Data.Monoid.Conj
+[46 of 57] Compiling Effect
+[47 of 57] Compiling Data.Semiring.Generic
+[48 of 57] Compiling Data.Semigroup.First
+[49 of 57] Compiling Data.Semigroup.Last
+[50 of 57] Compiling Data.Eq.Generic
+[51 of 57] Compiling Data.Monoid.Multiplicative
+[53 of 57] Compiling Effect.Unsafe
+[52 of 57] Compiling Effect.Uncurried
+[55 of 57] Compiling Effect.Class
+[54 of 57] Compiling Effect.Console
+[56 of 57] Compiling QR
+[57 of 57] Compiling Effect.Class.Console
 Warning found:
 in module QR
-at QR.purs:3:1 - 6:454361 (line 3, column 1 - line 6, column 454361)
+at QR.purs:3:1 - 6:451741 (line 3, column 1 - line 6, column 451741)
 
   No type declaration was provided for the top-level declaration of main.
   It is good practice to provide type declarations as a form of documentation.
@@ -1201,9 +1257,7 @@ node /opt/purs/run.mjs > QR.elm
 
 cp QR.elm /opt/elm/src/QR.elm
 cd /opt/elm; elm make src/QR.elm --output=/usr/local/share/quine-relay/QR.elm.js
-Compiling ...
-Compiling (1)
-Success! Compiled 1 module.
+Compiling ...Compiling (1)Success! Compiled 1 module.
 
     QR ───> /usr/local/share/quine-relay/QR.elm.js
 
@@ -1215,15 +1269,7 @@ Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.1/optimize 
 ##############################
 
 pyretc QR.arr QR.jarr
-Gathering dependencies...
-                         
-Compiling worklist...
-                     
-Loading existing compiled modules...
-                                    
-Compiling 1/1: QR.arr
-                     
-1/1 modules compiled (QR.arr)
+Gathering dependencies...                         Compiling worklist...                     Loading existing compiled modules...                                    Compiling 1/1: QR.arr                     1/1 modules compiled (QR.arr)
 Cleaning up and generating standalone...
 NODE_PATH=/opt/b05/node_modules node QR.jarr > QR.res
 
@@ -1549,7 +1595,7 @@ CC: ../../../lib/nim/lib/system.nim
 CC: QR.nim
 Hint:  [Link]
 Hint: mm: orc; threads: on; opt: none (DEBUG BUILD, `-d:release` generates faster code)
-28707 lines; 0.413s; 38.188MiB peakmem; proj: /usr/local/share/quine-relay/QR.nim; out: /usr/local/share/quine-relay/QR [SuccessX]
+28707 lines; 0.436s; 38.18MiB peakmem; proj: /usr/local/share/quine-relay/QR.nim; out: /usr/local/share/quine-relay/QR [SuccessX]
 ./QR > QR.m
 
 #################################
@@ -1632,7 +1678,7 @@ printf 'name = "qr"\nversion = "1.0.0"\n' > qrgleam/gleam.toml
 ########################
 
 roc build --output qrroc QR.roc
-[1;32m0[0m errors and [1;32m0[0m warnings found in 304 ms while successfully building:
+[1;32m0[0m errors and [1;32m0[0m warnings found in 408 ms while successfully building:
 
     qrroc
 ./qrroc > QR.inko
@@ -1687,23 +1733,23 @@ ponyc -V0 -b qrpony.out -o . qrpony
 
 odin run QR.odin -file > QR.rep
 
-##########################################
-##  238: rep (librep) -> Gambit Scheme  ##
-##########################################
+###########################################
+##  238: rep (librep) -> Chicken Scheme  ##
+###########################################
 
-rep QR.rep > QR.gambit.scm
+rep QR.rep > QR.chicken.scm
 
-############################################
-##  239: Gambit Scheme -> Chicken Scheme  ##
-############################################
+#######################################
+##  239: Chicken Scheme -> Rockstar  ##
+#######################################
 
-gsi QR.gambit.scm > QR.chicken.scm
+csi -q -s QR.chicken.scm > QR.rock
 
-##########################################
-##  240: Chicken Scheme -> Chez Scheme  ##
-##########################################
+####################################
+##  240: Rockstar -> Chez Scheme  ##
+####################################
 
-csi -q -s QR.chicken.scm > QR.chez.ss
+rockstar QR.rock > QR.chez.ss
 
 ####################################
 ##  241: Chez Scheme -> Parser 3  ##
@@ -1809,13 +1855,13 @@ spin -T QR.pr > QR.rail
 ##  255: Rail -> Kipple  ##
 ###########################
 
-ruby vendor/rail.rb QR.rail > QR.kpl
+rail QR.rail > QR.kpl
 
 ##############################
 ##  256: Kipple -> Beatnik  ##
 ##############################
 
-ruby vendor/kipple.rb QR.kpl > QR.beatnik
+cipple QR.kpl > QR.beatnik
 
 #############################
 ##  257: Beatnik -> Glass  ##
@@ -1895,7 +1941,7 @@ rm -f QR.out QR.t3
 ###########################
 
 uxnasm QR.tal QR.rom
-Assembled QR.rom in 57.59kb(90.73% used), 6 labels, 0 macros.
+Assembled QR.rom in 56.78kb(89.45% used), 6 labels, 0 macros.
 uxncli QR.rom > QR.mms
 Loaded QR.rom
 rm -f QR.rom

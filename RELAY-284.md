@@ -1,6 +1,6 @@
-# Quine Relay — 284 steps / 272 distinct languages
+# Quine Relay — 284 steps / 273 distinct languages
 
-A fork of Yusuke Endoh's (mame) [Quine Relay](https://github.com/mame/quine-relay), scaled from 128 steps (123 distinct languages) past our **256-distinct-language** goal to **284 steps (272 distinct Tier-1 languages)** — verified end-to-end in a single Ubuntu 26.04 Docker run on November 17, 2026.
+A fork of Yusuke Endoh's (mame) [Quine Relay](https://github.com/mame/quine-relay), scaled from 128 steps (123 distinct languages) past our **256-distinct-language** goal to **284 steps (273 distinct Tier-1 languages)** — verified end-to-end from a clean Ubuntu 26.04 `Dockerfile` build in November 2026.
 
 ## Why 284 steps cannot be a naive splice
 
@@ -9,7 +9,7 @@ In a quine relay, every language wraps the entire remainder of the loop as data.
 1. **Upper ladder (`Scilab` .. `Verilog`, steps ~61–75):** each escaping layer roughly doubles `\` and `"`.
 2. **Middle ladder (`JSFuck` -> `Kotlin` -> `Gravity` -> …):** JavaScript AST/string encoding and shell/JVM wrappers compound growth and hit hard 16-bit/24-bit VM limits.
 
-When we first merged all 21 individually-verified 6-language batches (`B01`–`B21`) onto the 157-step base, intermediate files exploded past **250+ MB** (`C++` alone reached **167 MB**, `B17` under `XSLT` reached **82.7 MB** by itself), crashing compilers, overflowing 64 KB JVM constant pools, exhausting 64 KB 8-bit CPU ROMs, and hitting V8's `Zone::Expand` AST limit.
+When we first merged all 21 individually-verified 6-language batches (`B01`–`B21`) onto the base relay, intermediate files exploded past **250+ MB** (`C++` alone reached **167 MB**, `B17` under `XSLT` reached **82.7 MB** by itself), crashing compilers, overflowing 64 KB JVM constant pools, exhausting 64 KB 8-bit CPU ROMs, and hitting V8's `Zone::Expand` AST limit.
 
 ## Key architectural techniques that brought 284 steps home
 
@@ -21,12 +21,16 @@ At 284 steps, `JSFuck` (step 193) originally expanded a 3.28 MB `JavaScript` pro
 
 ### 3. Self-reading comment decoders (`Shakespeare`, `Boo`, `Curry`, and `SNOBOL4..BCPL`)
 - **`Shakespeare` -> `S-Lang`:** Instead of generating 150+ MB of Elizabethan theatrical prose for `spl2c` + `gcc`, `QR.spl` is a genuine 18 KB Shakespeare play whose characters speak a **342-byte S-Lang decoder** followed by ` #:` payload lines that S-Lang reads from its own `QR.sl` source file.
-- **Historical front chain (`Ruby` -> `SNOBOL4` -> `Simula` -> `Oberon` -> `Euphoria` -> `ALGOL 60` -> `BCPL`):** Placed immediately after `Ruby`, each classic compiler compiles a tiny constant-size comment decoder (`~200–600 bytes` of code) that decodes the comment lines of its own source file, stepping smoothly down from 54.7 MB to the 9.95 MB clean corridor.
+- **Historical front chain (`Ruby` -> `SNOBOL4` -> `Simula` -> `Oberon` -> `Euphoria` -> `ALGOL 60` -> `BCPL`):** Placed immediately after `Ruby`, each classic compiler compiles a tiny constant-size comment decoder (`~200–600 bytes` of code) that decodes the comment lines of its own source file, stepping smoothly down from ~55 MB to the ~9.9 MB clean corridor.
 
 ### 4. Interleaved Re-Pair compression across 6 CPU/VM assemblies
 Adjacent literal assemblers (`BYTE "..."` + `.byte N` per quote/newline) multiply assembly source size ~2.5× per step and overflow 64 KB address spaces on 8-bit CPUs (`6502` and `Z80`). Interleaving dictionary pair-compressing assemblers with literal assemblers (`Uxntal` -> `MMIX` -> `6502 asm` -> `ARM64 asm` -> `Z80 asm` -> `RISC-V asm`) and relocating `BeanShell -> Befunge -> BLC8 -> Brainfuck -> ksh -> Lazy K -> LiveScript` right after `RISC-V asm` (~55 KB payload) kept every ROM and stack well inside hardware bounds.
 
-### 5. Breaking 16-bit, 24-bit, and heap limits across 30+ compilers & VMs
+### 5. Official reference interpreters for esolangs & strict 3-per-family compliance
+- **`Hexagony`, `Rail`, `Kipple`, `Taxi`, `Rockstar`:** Run directly on their canonical upstream interpreters (`m-ender/hexagony` using a zero-backslash `<`/`/`/`>` boustrophedon snake, Jonathon Duerig's C++ `TryItOnline/rail`, Jannis Harder's C `cipple` verified byte-for-byte against Rune Berge's `Kipple.jar`, `BigZaphod/Taxi`, and Dylan Beattie's `Rockstar v2.0.15`), while `Glass` and `Emmental` are verified byte-for-byte against Gregor Richards' `glass-0.12` C++ and Chris Pressey's `catseye/Emmental`.
+- **Strict family cap (max 3):** `Gambit Scheme` from the intermediate 157 base was replaced by `Rockstar`, keeping Scheme at 3 implementations (`Scheme`, `Chicken Scheme`, `Chez Scheme`) and bringing the relay to **284 steps / 273 distinct Tier-1 languages** with zero family-cap exceptions.
+
+### 6. Breaking 16-bit, 24-bit, and heap limits across 30+ compilers & VMs
 - **JVM 64 KB `CONSTANT_Utf8` & method bytecode limits:** Chunked literals/methods in `Java`, `Groovy`, `Clojure`, `Jasmin`, `AspectJ` (`^N^` RLE), `ArnoldC` (`m0..mN` methods), `Fantom`, `Golo`, `Ballerina`, `Yeti`, `Gosu`, and `Frege`.
 - **WebAssembly LEB128:** Upgraded WASM data-segment sizing from 2-byte to dynamic 4-byte LEB128 (supporting payloads up to 256 MB).
 - **Lout 16-bit `SHORT_MAX`:** Paginated `QR.lout` into 40-line `@NP` pages so vertical galleys never overflow 32,767 internal units.
@@ -37,7 +41,7 @@ Adjacent literal assemblers (`BYTE "..."` + `.byte N` per quote/newline) multipl
 
 | Theme | Languages added |
 |---|---|
-| **Base 151 & 157** | BASIC (bwBASIC), ChucK, dash, groff, Hy, Jsonnet, newLISP, NQP, PicoLisp, Racket, SQL (SQLite), xonsh, mksh, BusyBox ash, yash, Elvish, VHDL, Genie, XQuery, Koto, Macaulay2, Coconut, Anko, Tengo, Rhai, rep (librep), Chez Scheme, Chicken Scheme, Gambit Scheme |
+| **Base 151 & 157** | BASIC (bwBASIC), ChucK, dash, groff, Hy, Jsonnet, newLISP, NQP, PicoLisp, Racket, SQL (SQLite), xonsh, mksh, BusyBox ash, yash, Elvish, VHDL, Genie, XQuery, Koto, Macaulay2, Coconut, Anko, Tengo, Rhai, rep (librep), Chez Scheme, Chicken Scheme |
 | **mame retirees (B01–B03)** | Maxima, GNU Smalltalk, UCBLogo, Gri, Julia, Dafny, A+, Boo, CDuce, Falcon, eC, Lisaac, Curry, nesC, Parrot asm (PASM), GSL, Seed7, AspectC++ |
 | **JVM & JS targets (B04–B05)** | Fantom, Frege, Golo, Gosu, Ballerina, Yeti, ReScript, PureScript, Elm, Imba, Pyret, Wisp |
 | **Modern shells (B06)** | PowerShell, Nushell, Ion, YSH (Oils), Murex, Hush, es |
@@ -48,7 +52,7 @@ Adjacent literal assemblers (`BYTE "..."` + `.byte N` per quote/newline) multipl
 | **Historical & paradigms (B15–B16)** | SNOBOL4, Simula, Oberon, Euphoria, ALGOL 60, BCPL, Pyth, Emmental, ArnoldC, LFE, Joy, Factor |
 | **Typesetting & IF (B17)** | Lout, Plain TeX, MetaPost, Inform 6, Ink, TADS 3 |
 | **Assembly & tiny VMs (B18)** | Uxntal, MMIX, 6502 asm, ARM64 asm, Z80 asm, RISC-V asm |
-| **Esolangs & config (B19–B21)** | ><> (Fish), Hexagony, ///, CJam, Underload, Brain-Flak, Rail, Kipple, Beatnik, Glass, Taxi, Deadfish~, Nix, Pkl, CUE, Nickel, Starlark, Rego |
+| **Esolangs & config (B19–B21)** | ><> (Fish), Hexagony, ///, CJam, Underload, Brain-Flak, Rail, Kipple, Beatnik, Glass, Taxi, Deadfish~, Rockstar, Nix, Pkl, CUE, Nickel, Starlark, Rego |
 
 ## Credits & License
 

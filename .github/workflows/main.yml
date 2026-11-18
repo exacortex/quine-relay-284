@@ -257,8 +257,8 @@ jobs:
           sudo docker cp qr:/usr/local/share/quine-relay/QR.pony spoiler/
           sudo docker cp qr:/usr/local/share/quine-relay/QR.odin spoiler/
           sudo docker cp qr:/usr/local/share/quine-relay/QR.rep spoiler/
-          sudo docker cp qr:/usr/local/share/quine-relay/QR.gambit.scm spoiler/
           sudo docker cp qr:/usr/local/share/quine-relay/QR.chicken.scm spoiler/
+          sudo docker cp qr:/usr/local/share/quine-relay/QR.rock spoiler/
           sudo docker cp qr:/usr/local/share/quine-relay/QR.chez.ss spoiler/
           sudo docker cp qr:/usr/local/share/quine-relay/QR.p spoiler/
           sudo docker cp qr:/usr/local/share/quine-relay/QR.pas spoiler/

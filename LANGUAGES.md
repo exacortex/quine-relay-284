@@ -5,7 +5,7 @@ Every step of the relay, in run order, with its record status. [RECORDS.md](RECO
 - **T1**: counts under Tier 1 (distinct languages) and Tier 2 (relay steps).
 - **T2 only**: counts as a relay step, but merges into another language under Tier 1.
 
-**Totals: 284 steps (Tier 2), 272 distinct languages (Tier 1).**
+**Totals: 284 steps (Tier 2), 273 distinct languages (Tier 1).**
 
 | # | Language | Tier | Added by | Note |
 |---|---|---|---|---|
@@ -247,8 +247,8 @@ Every step of the relay, in run order, with its record status. [RECORDS.md](RECO
 | 236 | Pony | T1 | this fork |  |
 | 237 | Odin | T1 | this fork |  |
 | 238 | rep (librep) | T1 | this fork |  |
-| 239 | Gambit Scheme | T2 only | this fork | another Scheme implementation (Scheme counts) |
-| 240 | Chicken Scheme | T2 only | this fork | another Scheme implementation (Scheme counts) |
+| 239 | Chicken Scheme | T2 only | this fork | another Scheme implementation (Scheme counts) |
+| 240 | Rockstar | T1 | this fork |  |
 | 241 | Chez Scheme | T2 only | this fork | another Scheme implementation (Scheme counts) |
 | 242 | Parser 3 | T1 | mame |  |
 | 243 | Pascal | T1 | mame |  |
