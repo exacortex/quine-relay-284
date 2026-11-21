@@ -1,14 +1,20 @@
-# Quine Relay Records
+# Quine Relay Records *(ARCHIVED — 284 WITHDRAWN)*
 
-These are the rules we use to count a quine relay, and the leaderboard for anyone who wants to beat it.
-A record needs a public repo and a full run that anyone can repeat. A number alone doesn't count.
+> [!CAUTION]
+> **Withdrawn:** `exacortex/quine-relay-284` is **not** a valid record — several steps violated Yusuke Endoh's no-cheating rules.
+> For the active, strictly audited leaderboard and rules, see **[exacortex/quine-relay-256/RECORDS.md](https://github.com/exacortex/quine-relay-256/blob/main/RECORDS.md)**.
 
-## Leaderboard
+---
 
-| Relay | Tier 1 (distinct languages) | Tier 2 (relay steps) | Verified | Date |
+These were the earlier draft rules before adopting Yusuke Endoh's three no-cheating rules and dropping Tier 2.
+
+## Leaderboard *(superseded — see [quine-relay-256/RECORDS.md](https://github.com/exacortex/quine-relay-256/blob/main/RECORDS.md))*
+
+| Relay | Tier 1 (distinct languages) | Tier 2 (relay steps) | Status | Date |
 |---|---|---|---|---|
-| [exacortex/quine-relay-284](https://github.com/exacortex/quine-relay-284) (this repo) | **273** | **284** | Clean `Dockerfile` build + full run on Ubuntu 26.04, zero stand-ins ([proof](proof/)) | 2026-11-18 |
-| [exacortex/quine-relay-151](https://github.com/exacortex/quine-relay-151) | 143 | 151 | Docker, Ubuntu 26.04, zero stand-ins | 2026-11-13 |
+| [exacortex/quine-relay-256](https://github.com/exacortex/quine-relay-256) *(active replacement)* | **256** | **256** | Strictly under mame's no-cheating rules, clean Ubuntu 26.04 Docker proof + Malbolge Unshackled | 2026-11-21 |
+| ~~[exacortex/quine-relay-284](https://github.com/exacortex/quine-relay-284)~~ *(this repo — WITHDRAWN)* | ~~273~~ | ~~284~~ | **Withdrawn** — violated no-cheating rules | 2026-11-18 |
+| ~~[exacortex/quine-relay-151](https://github.com/exacortex/quine-relay-151)~~ *(not counted)* | ~~143~~ | ~~151~~ | **Not counted** — BASIC step wrote temp file + `cat` | 2026-11-13 |
 | [mame/quine-relay](https://github.com/mame/quine-relay) | 123 | 128 | mame's CI, Ubuntu 26.04 | 2026 |
 
 To add a relay, open a pull request that edits this table and links to your proof (see "How to claim a record" below).

@@ -1,12 +1,15 @@
-# Victory Lap: Scaling Quine Relay to 284 Steps & 273 Distinct Languages
+# Victory Lap: Scaling Quine Relay to 284 Steps & 273 Distinct Languages *(WITHDRAWN)*
 
-> **One 42,680-byte Ruby file (`QR.rb`) passes consecutively through 284 real compilers, assemblers, virtual machines, proof assistants, shells, typesetters, computer algebra systems, and esoteric interpreters — spanning 273 distinct Tier-1 languages — and prints itself back out, byte for byte (`9ce6dbe3...eb509a`).**
+> [!CAUTION]
+> **Withdrawn (November 2026):** This document describes the earlier 284-step prototype, which was withdrawn after Yusuke Endoh's review because several steps violated his no-cheating rules (including the self-reading `S-Lang` `fopen` shortcut and temp-file/`cat` workarounds noted below). See the clean, rebuilt, strictly audited **[exacortex/quine-relay-256](https://github.com/exacortex/quine-relay-256)** (`RELAY-256.md`) instead.
+
+> *Historical prototype note:* One 42,680-byte Ruby file (`QR.rb`) passed through 284 steps (`9ce6dbe3...eb509a`), prior to adopting mame's no-cheating rules.
 
 ---
 
 ## 1. The Arc: From 128 -> 151 -> 157 -> The 250 MB Wall -> 284
 
-Yusuke Endoh's ([`mame/quine-relay`](https://github.com/mame/quine-relay)) 128-step Uroboros quine stood as one of programming's great recreational landmarks since April 2018. In November 2026, we set out to cross **256 distinct languages** under strict, publicly auditable rules — keeping all 128 of Endoh's Ubuntu 26.04 steps intact, restoring 17 of the 20 languages Ubuntu had retired over the previous decade, and adding modern systems languages, interactive theorem provers, array languages, hardware ISAs, interactive-fiction engines, and canonical esolangs.
+Yusuke Endoh's ([`mame/quine-relay`](https://github.com/mame/quine-relay)) 128-step Uroboros quine has been one of programming's great recreational landmarks since 2013. In November 2026, we set out to cross **256 distinct languages** under strict, publicly auditable rules — keeping all 128 of Endoh's Ubuntu 26.04 steps intact, restoring 17 of the 20 languages Ubuntu had retired over the previous decade, and adding modern systems languages, interactive theorem provers, array languages, hardware ISAs, interactive-fiction engines, and canonical esolangs.
 
 Our first milestones (`151` steps / `143` distinct languages, then `157` steps) fit comfortably inside Endoh's existing architecture (~3 MB peak corridor). To scale past 256, we partitioned 130+ candidate languages into **21 parallel 6-language batches (`B01`–`B21`)**, verifying each batch independently in Docker on top of the 157-step base.
 

@@ -1,7 +1,25 @@
-# Quine Relay 284
+# Quine Relay 284 *(WITHDRAWN)*
 
-**A 284-step quine relay across 273 distinct programming languages, verified end to end from a clean Ubuntu 26.04 Docker build.**
-It extends [Yusuke Endoh's Quine Relay](https://github.com/mame/quine-relay) (128 steps / 123 distinct languages) with 156 more steps (+150 net new distinct languages) — more than doubling the previous world record under both counting rules.
+> [!CAUTION]
+> **THIS RECORD CLAIM HAS BEEN WITHDRAWN.**
+>
+> This repository is archived as a historical record of our earlier November 18, 2026 prototype. After [Yusuke Endoh (`@mametter`)](https://github.com/mame/quine-relay) reviewed it, we withdrew the 284-step claim because multiple steps violated his three no-cheating rules:
+> 1. **No code on the command line** (several steps passed code/queries via CLI flags).
+> 2. **No reading files or stdin** (several steps — including `S-Lang` `fopen` and historical self-readers — read their own or another step's file).
+> 3. **Output on stdout only** (several steps wrote temporary files and printed them with `cat`/`tail`, redirected `2> OUTFILE`, or patched interpreter banners).
+>
+> It also included non-distinct Tier-2 entries and custom subset interpreters.
+>
+> **Use the clean, rebuilt, strictly audited replacement instead:**
+> - **Repository:** [exacortex/quine-relay-256](https://github.com/exacortex/quine-relay-256) — **256 steps = 256 distinct languages** (all 123 single-implementation `mame-128` languages including verbatim zero-`fopen` `Scilab -> sed -> Shakespeare -> S-Lang`, 16/20 restored `mame` retirees, **Malbolge Unshackled** with zero `'/'` ops, and 116 standalone open-source languages on canonical upstream toolchains; zero rule violations).
+> - **Summary & proof:** [exacortex.net/record](https://exacortex.net/record)
+
+---
+
+*Original historical README preserved below for transparency:*
+
+**An earlier 284-step prototype across 273 distinct programming languages (withdrawn — see notice above).**
+It extended [Yusuke Endoh's Quine Relay](https://github.com/mame/quine-relay) (128 steps / 123 distinct languages), prior to rebuilding strictly under Endoh's no-cheating rules in [exacortex/quine-relay-256](https://github.com/exacortex/quine-relay-256).
 
 ## What this is
 
